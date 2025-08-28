@@ -1,3 +1,5 @@
+@import "tailwindcss";
+
 :root {
   width: 100%;
   height: 100%;
@@ -12,6 +14,21 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+:root[data-theme="light"] {
+  --background: 188 47% 51%;
+  --textColor: 0 0% 0%;
+}
+
+:root[data-theme="dark"] {
+  --background: 222 47% 11%;
+  --textColor: 0 0% 95%;
+}
+
+@theme inline {
+  --color-background: hsl(var(--background));
+  --color-textColor: hsl(var(--textColor));
 }
 
 body {

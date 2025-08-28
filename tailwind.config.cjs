@@ -1,11 +1,17 @@
+// tailwind.config.cjs
 /** @type {import('tailwindcss').Config} */
-export default {
+module.exports = {
     content: [
         "./index.html",
         "./src/**/*.{js,ts,jsx,tsx}",
     ],
+    darkMode: ['class', '[data-theme="dark"]'], // optional: enables `dark:` with your data attribute
     theme: {
         extend: {
+            colors: {
+                background: "hsl(var(--background) / <alpha-value>)",
+                textColor: "hsl(var(--textColor) / <alpha-value>)",
+            },
             scale: {
                 55: "0.55",
                 65: "0.65",

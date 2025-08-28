@@ -94,6 +94,22 @@ export const ThreeLineMenu = () => {
                         Record
                     </Link>
                 </nav>
+                <nav className="py-1">
+                    <Link
+                        to="/scripta/about"
+                        className="block px-4 py-2 text-sm text-white/90 hover:bg-white/10"
+                        onClick={() => setOpen(false)}>
+                        About
+                    </Link>
+                </nav>
+                <nav className="py-1">
+                    <Link
+                        to="/scripta/settings"
+                        className="block px-4 py-2 text-sm text-white/90 hover:bg-white/10"
+                        onClick={() => setOpen(false)}>
+                        Settings
+                    </Link>
+                </nav>
             </div>
         </div>
     );

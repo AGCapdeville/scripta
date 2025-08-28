@@ -10,9 +10,10 @@ export const Home = () => {
     <>
       <p>Select a game:</p>
       <div className="flex flex-col w-full items-center content-evenly">
-        <div className="w-fit px-4 py-2 
+        <div className="
+            w-fit px-4 py-2 
             text-sm font-medium 
-            bg-[#7B5CF0] 
+          bg-[#7B5CF0] 
           text-white rounded"
           >
           <Link to="/scripta/daily">Daily Word</Link>
