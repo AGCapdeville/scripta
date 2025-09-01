@@ -1,4 +1,3 @@
-
 export interface GameModeProperties {
     name: string;
     wins: number;
@@ -11,5 +10,6 @@ export interface GameModeProperties {
 export interface PlayerDataProperties {
     username?: string;
     dailyGame: GameModeProperties;
+    freeGame: GameModeProperties;
     waveGame: GameModeProperties;
 }

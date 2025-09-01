@@ -12,7 +12,6 @@ type ResultsProps = {
 
 export const Results = ({ game, outcome, guesses, secretWord, onClose }: ResultsProps) => {
 
-  console.log("Saving game score:", game, outcome, guesses);
   saveGameScore(game, outcome, guesses);
 
   const modalRoot = document.getElementById("modal-root")!;

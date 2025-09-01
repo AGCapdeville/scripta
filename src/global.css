@@ -1,0 +1,100 @@
+@import "tailwindcss";
+
+:root {
+  width: 100%;
+  height: 100%;
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Light theme */
+:root[data-theme="light"] {
+  --text: 222 33% 93%;
+  --text-page: 0 0% 20%;
+  --text-page-bold: 0 0% 10%;
+  --background: 0 0% 90%;
+  --foreground: 220 8% 29%;
+
+  --fade-in: 0 0% 100%;
+
+  --letter-bg: 215 15% 15%;
+  --letter-text: 219 44% 94%;
+  --letter-correct: 111 53% 49%;
+  --letter-present: 253 83% 65%;
+  --letter-default: 225 22% 11%;
+  --letter-border: 227 17% 27%;
+
+  --key-bg: 215 21% 11%;
+  --key-text: 219 44% 94%;
+  --key-correct: 111 53% 49%;
+  --key-present: 253 83% 65%;
+  --key-missing: 214 10% 31%;
+  --key-default: 212 9% 58%;
+  --key-border: 212 12% 21%;
+}
+
+/* Dark theme (fill with your real dark values; using same here as placeholder) */
+:root[data-theme="dark"] {
+  --text: 222 33% 93%;
+  --text-page: 0 0% 80%;
+  --text-page-bold: 0 0% 90%;
+  --background: 0 0% 10%;
+  --foreground: 220 8% 29%;
+
+  --fade-in: 0 0% 0%;
+
+  --letter-bg: 215 15% 15%;
+  --letter-text: 219 44% 94%;
+  --letter-correct: 111 53% 49%;
+  --letter-present: 253 83% 65%;
+  --letter-default: 225 22% 11%;
+  --letter-border: 227 17% 27%;
+
+  --key-bg: 215 21% 11%;
+  --key-text: 219 44% 94%;
+  --key-correct: 111 53% 49%;
+  --key-present: 253 83% 65%;
+  --key-missing: 214 10% 31%;
+  --key-default: 212 9% 58%;
+  --key-border: 212 12% 21%;
+}
+
+/* Tell Tailwind to generate color utilities from your tokens */
+@theme inline {
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+
+  --color-fade-in: hsl(var(--fade-in));
+
+  --color-text: hsl(var(--text));
+  --color-text-page: hsl(var(--text-page));
+  --color-text-page-bold: hsl(var(--text-page-bold));
+
+  --color-letter-bg: hsl(var(--letter-bg));
+  --color-letter-text: hsl(var(--letter-text));
+  --color-letter-correct: hsl(var(--letter-correct));
+  --color-letter-present: hsl(var(--letter-present));
+  --color-letter-default: hsl(var(--letter-default));
+  --color-letter-border: hsl(var(--letter-border));
+
+  --color-key-bg: hsl(var(--key-bg));
+  --color-key-text: hsl(var(--key-text));
+  --color-key-correct: hsl(var(--key-correct));
+  --color-key-present: hsl(var(--key-present));
+  --color-key-missing: hsl(var(--key-missing));
+  --color-key-default: hsl(var(--key-default));
+  --color-key-border: hsl(var(--key-border));
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+}

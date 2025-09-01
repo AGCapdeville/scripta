@@ -1,7 +1,7 @@
 export const About = () => {
   return (
-    <div>
-      <h1>About</h1>
+    <div className="bg-background h-full w-full min-h-screen text-text-page p-4">
+      <div className="text-2xl font-bold text-text-page p-4">About</div>
       <p>Scripta is a word game. The rules are the following:</p>
       <ul className="list-disc list-inside">
         <li>You have 6 attempts to guess a hidden 5-letter word.</li>

@@ -14,8 +14,8 @@ const TileParent = `
 `;
 const TileFront = `
     absolute inset-0 grid place-items-center rounded-lg
-    bg-[${DefaultLetterColor}]
-    border-2 border-[${BorderLetterColor}]
+    bg-letter-default]
+    border-2 border-letter-border
     [backface-visibility:hidden]
 `;
 
@@ -29,7 +29,6 @@ const TileBack = `
 const LetterContainer = `
     w-[52px] h-[52px] 
     [perspective:900px] 
-    text-[${LetterColor}]
     font-black
 `;
 

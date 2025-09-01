@@ -55,7 +55,7 @@ export const Navbar = () => {
   useLoopTitle(title, setCharSeed, 19000);
 
   return (
-    <nav className="flex items-center p-2 text-white bg-black">
+    <nav className="flex p-2 bg-foreground text-text">
       <div className="absolute left-0 right-0">
         <Link
           key={charSeed}

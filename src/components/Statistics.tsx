@@ -6,38 +6,42 @@ interface StatisticsProps {
     totalGames: number;
     streak: number;
     maxStreak: number;
+    hideStreak?: boolean;
 }
 
 export const Statistics = ({
     winRate,
     totalGames,
     streak,
-    maxStreak
+    maxStreak,
+    hideStreak = false
 }: StatisticsProps) => {
 
     return (
         <div style={{ display: "flex", justifyContent: "space-evenly", maxWidth: 720, fontFamily: "system-ui, sans-serif" }}>
             <div className="flexcolumn centered">
-                <div className="title-text">{totalGames}</div>
-                <div className="sub-text">Played </div>
+                <div className="text-base text-text-page-bold font-bold">{totalGames}</div>
+                <div className="sub-text text-text-page/90">Played </div>
             </div>
             <div className="flexcolumn centered">
-                <div className="title-text">{winRate}</div>
-                <div className="sub-text">Win %</div>
+                <div className="text-base text-text-page-bold font-bold">{winRate}</div>
+                <div className="sub-text text-text-page/90">Win %</div>
             </div>
-            <div className="flexcolumn centered">
-                <div className="title-text">{streak}</div>
-                <div className="sub-text">Streak</div>
-            </div>
-            <div className="flexcolumn centered">
-                <div className="title-text">{maxStreak}</div>
-                <div className="sub-text">Max Streak</div>
-            </div>
+            { hideStreak ? 
+                <>
+                    <div className="flexcolumn centered">
+                        <div className="text-base text-text-page-bold font-bold">{streak}</div>
+                        <div className="sub-text text-text-page/90">Streak</div>
+                    </div>
+                    <div className="flexcolumn centered">
+                        <div className="text-base text-text-page-bold font-bold">{maxStreak}</div>
+                        <div className="sub-text text-text-page/90">Max Streak</div>
+                    </div>
+                </> : <></>
+            }
         </div>
     );
 }
-
-
 
 export const Distribution = ({ distribution }: { distribution: number[] }) => {
 
@@ -49,7 +53,7 @@ export const Distribution = ({ distribution }: { distribution: number[] }) => {
 
             {distribution.map((count, index) => (
                 <div key={index} className="distribution-row">
-                    <div className="distribution-number">
+                    <div className="distribution-number text-text-page">
                         {index + 1}:
                     </div>
                     <Bar count={count} maxCount={maxCount} total={total} />
@@ -59,7 +63,6 @@ export const Distribution = ({ distribution }: { distribution: number[] }) => {
         </div>
     );
 }
-  
 
 export const Bar = ({ 
     count, 
@@ -88,11 +91,17 @@ export const Bar = ({
 export const GameModeStatistics = ( game: GameModeProperties ) => {
     const totalGames = game.wins + game.losses;
     return(
-        <div style = {{ maxWidth: 720, padding: 16, fontFamily: "system-ui, sans-serif" }} >
-            <h1 style={{ marginTop: 0 }}>{game.name}</h1>
-            <p>STATISTICS:</p>
-            <Statistics winRate={toPercentage(game.wins, totalGames)} totalGames={totalGames} streak={game.streak} maxStreak={game.maxStreak} />
-            <p>GUESS DISTRIBUTION:</p>
+        <div className="w-full h-full max-w-3xl p-4">
+            <div className="text-2xl text-text-page-bold font-bold py-2">{game.name}</div>
+            <div className="text-md text-text-page mt-2 mb-2">STATISTICS:</div>
+            <Statistics 
+                winRate={toPercentage(game.wins, totalGames)}
+                totalGames={totalGames} 
+                streak={game.streak}
+                maxStreak={game.maxStreak} 
+                hideStreak={game.name !== "Free Play"}
+            />
+            <div className="text-md text-text-page mt-2 mb-2">GUESS DISTRIBUTION:</div>
             <Distribution distribution={game.distribution} />
         </div >
     );

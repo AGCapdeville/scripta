@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import seedrandom from 'seedrandom';
 
 import { Word } from '../components/Word';
 import { Keys } from '../components/Keys';
@@ -9,30 +8,11 @@ import { Results } from '../components/Results';
 
 import { useNavigate } from "react-router-dom";
 
-const getDailySeed = (ns = 'my-game'): string => {
-  const todayUTC = new Date().toISOString().slice(0, 10); // "YYYY-MM-DD"
-  return `${ns}:${todayUTC}`;
-}
-
-const getDailyRNG = (ns?: string) => {
-  return seedrandom(getDailySeed(ns));
-}
-
-const getDailyWord = (wordList: string[]): string => {
-
-  let key = getDailySeed();
-  let word = localStorage.getItem(key);
-
-  if (!word) {
-    const rng = getDailyRNG();
-    word = wordList[Math.floor(rng() * wordList.length)];
-    localStorage.setItem(getDailySeed(), word);
-  }
-
-  return word; 
+const getFreeWord = (wordList: string[]): string => {
+  return wordList[Math.floor(Math.random() * wordList.length)];
 };
 
-export const DailyGame = () => {
+export const FreeGame = () => {
 
   const [word, setWord] = useState("     ");
   const [save, saveWord] = useState(false);
@@ -57,7 +37,7 @@ export const DailyGame = () => {
   const fetchSecretWord = async () => {
 
     const fiveLetterWords = wordJSON.filter((w: string) => w.length === 5);
-    const word = getDailyWord(fiveLetterWords);
+    const word = getFreeWord(fiveLetterWords);
     
     try {
       setSecretWord(word);
@@ -122,7 +102,7 @@ export const DailyGame = () => {
 
       {revealModal && (
         <Results
-          game="Daily Game"
+          game="Free Game"
           outcome={outcome}
           guesses={attempts}
           secretWord={secretWord}

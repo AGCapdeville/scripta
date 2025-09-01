@@ -4,10 +4,18 @@ export const loadPlayerData = (): PlayerDataProperties => {
     let player: PlayerDataProperties = localStorage.getItem("playerData") ? JSON.parse(localStorage.getItem("playerData")!) :  null;
 
     if (!player) {
-        console.log("No player data found, creating new player data.");
         
         const daily: GameModeProperties = {
-            name: "Daily Game",
+            name: "Daily Word",
+            wins: 0,
+            losses: 0,
+            distribution: Array(6).fill(0),
+            streak: 0,
+            maxStreak: 0,
+        }
+
+        const free: GameModeProperties = {
+            name: "Free Play",
             wins: 0,
             losses: 0,
             distribution: Array(6).fill(0),
@@ -16,7 +24,7 @@ export const loadPlayerData = (): PlayerDataProperties => {
         }
 
         const wave: GameModeProperties = {
-            name: "Wave Game",
+            name: "Time Attack",
             wins: 0,
             losses: 0,
             distribution: Array(6).fill(0),
@@ -27,13 +35,12 @@ export const loadPlayerData = (): PlayerDataProperties => {
         const newPlayer: PlayerDataProperties = {
             username: "",
             dailyGame: daily,
+            freeGame: free,
             waveGame: wave,
         };
 
         localStorage.setItem("playerData", JSON.stringify(newPlayer));
         player = newPlayer
-    } else {
-        console.log("Player data found, updating...");
     }
 
     return player;
@@ -41,8 +48,22 @@ export const loadPlayerData = (): PlayerDataProperties => {
 
 export const saveGameScore = (gameType: string, outcome: boolean, guesses: number) => {
     const player = loadPlayerData();
-    const game = gameType === "Daily Game" ? player.dailyGame : player.waveGame;
-    const totalGames = game.wins + game.losses;
+    let game: GameModeProperties;
+
+    switch (gameType) {
+        case "Daily Game":
+            game = player.dailyGame;
+            break;
+        case "Free Game":
+            game = player.freeGame;
+            break;
+        case "Time Attack":
+            game = player.waveGame;
+            break;
+        default:
+            console.error("Invalid game type");
+            return;
+    }   
     
     if (outcome) {
         game.wins += 1;

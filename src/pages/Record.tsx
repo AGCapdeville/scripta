@@ -1,18 +1,16 @@
-import React from "react";
-import { Statistics, Distribution, GameModeStatistics } from "../components/Statistics";
+import { GameModeStatistics } from "../components/Statistics";
 import { loadPlayerData } from "../utility/UserData";
-import { toPercentage } from "../utility/toPercentage";
 
 export const Record = () => {
   const player = loadPlayerData();
   const dailyGame = player.dailyGame;
-  const waveGame = player.waveGame;
+  const freeGame = player.freeGame;
 
   return (
-    <>
-      <h1>Player Record</h1>
+    <div className="flex flex-col items-center bg-background w-full min-h-screen  overflow-y-auto text-text p-4">
+      <div className="text-2xl py-2 font-bold text-text-page-bold">Player Record</div>
       {GameModeStatistics(dailyGame)}
-      {GameModeStatistics(waveGame)}
-    </>
+      {GameModeStatistics(freeGame)}
+    </div>
   );
 }
