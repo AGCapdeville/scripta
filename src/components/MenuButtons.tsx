@@ -147,7 +147,8 @@ export const HamburgerMenu = () => {
             {/* Slide-in Panel */}
             <div
                 className={`fixed top-0 right-0 z-50 h-full w-64 bg-background shadow-xl transform transition-transform duration-300 ease-in-out
-                ${open ? "translate-x-0" : "translate-x-full"}`}
+                ${open ? "translate-x-0" : "translate-x-full"} 
+                border-l-1 border-border`}
             >
                 {/* Close Button */}
                 <div className="flex justify-end p-4">
@@ -164,18 +165,52 @@ export const HamburgerMenu = () => {
                 <nav className="w-full flex flex-col text-foreground/70 hover:text-foreground transition gap-4 ">
                     <LinkButton 
                         to="/scripta/"
-                        className="px-3 py-2 hover:text-violet-400 hover:bg-black"
+                        // className="px-3 py-2 hover:text-violet-400 hover:bg-black"
+                        className="pl-4 px-3 py-2 text-sm text-foreground/70 hover:text-foreground hover:bg-black text-foreground transition"
                         clickFunction={() => setOpen(false)}
                     >
                         Home
                     </LinkButton>
                     <LinkButton
                         to="/scripta/daily"
-                        className="pl-4 hover:text-violet-400 hover:bg-black"
+                        // className="pl-4 hover:text-violet-400 hover:bg-black"
+                        className="pl-4 px-3 py-2 text-sm text-foreground/70 hover:text-foreground hover:bg-black text-foreground transition"
                         clickFunction={() => setOpen(false)}
                     >
                         Daily
                     </LinkButton>
+
+                    <LinkButton
+                        to="/scripta/modes"
+                        children="Game Modes"
+                        className="pl-4 px-3 py-2 text-sm text-foreground/70 hover:text-foreground hover:bg-black text-foreground transition"
+                        clickFunction={() => setOpen(false)}
+                    />
+                    <LinkButton
+                        to="/scripta/how-to-play"
+                        children="How to Play"
+                        className="pl-4 px-3 py-2 text-sm text-foreground/70 hover:text-foreground hover:bg-black text-foreground transition"
+                        clickFunction={() => setOpen(false)}
+                    />
+                    <LinkButton
+                        to="/scripta/statisics"
+                        children="Statistics"
+                        className="pl-4 px-3 py-2 text-sm text-foreground/70 hover:text-foreground hover:bg-black text-foreground transition"
+                        clickFunction={() => setOpen(false)}
+                    />
+                    <LinkButton
+                        to="/scripta/settings"
+                        children="Settings"
+                        className="pl-4 px-3 py-2 text-sm text-foreground/70 hover:text-foreground hover:bg-black text-foreground transition"
+                        clickFunction={() => setOpen(false)}
+                    />
+                    <LinkButton
+                        to="/scripta/about"
+                        children="About"
+                        className="pl-4 px-3 py-2 text-sm text-foreground/70 hover:text-foreground hover:bg-black text-foreground transition"
+                        clickFunction={() => setOpen(false)}
+                    />
+
                     {/* <Link to="scripta/modes"
                         className="px-3 py-2 text-sm "
                     >

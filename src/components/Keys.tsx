@@ -105,7 +105,7 @@ export const Keys = ({
       // basic Tailwind-ish classes — adjust to your design system
       const base =
         "rounded-md px-2 sm:px-3 md:px-4 " +        // horizontal padding scales
-        "h-10 sm:h-14 md:h-16 " +                    // key height scales
+        "h-10 sm:h-12 md:h-14 " +                    // key height scales
         "text-[12px] sm:text-xs md:text-sm font-bold uppercase " + // text size scales
         "flex items-center justify-center " +
         "transition-colors duration-150 active:scale-95 disabled:opacity-50 disabled:pointer-events-none ";

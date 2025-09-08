@@ -22,7 +22,7 @@
   --foreground: hsla(0 0% 10%);
 
   /* Primary brand color */
-  --primary: hsla(243, 75%, 54%);       
+  --primary: hsla(253 83% 65%);       
   --primary-foreground: hsla(0, 0%, 100%);
 
   /* Borders and accents */
@@ -65,7 +65,7 @@
   --foreground: hsla(0 0% 100%);
 
   /* Primary brand color */
-  --primary: hsla(243, 75%, 54%);
+  --primary: hsla(253 83% 65%);
   --primary-foreground: hsla(0, 0%, 100%);
   
   /* Borders and accents */

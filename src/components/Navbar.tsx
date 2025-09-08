@@ -55,7 +55,7 @@ export const Navbar = () => {
       <header className="mx-auto flex w-full max-w-6xl items-center justify-between p-2">
 
         <LinkButton to="/scripta" className="group inline-flex items-center gap-2"> 
-          <div className="grid h-9 w-9 place-items-center rounded-xl border border-border/70 bg-background shadow-sm transition-transform group-hover:scale-105">
+          <div className="text-white grid h-9 w-9 place-items-center rounded-xl border border-border/70 bg-primary shadow-sm transition-transform group-hover:scale-105">
             <Sparkles className="h-5 w-5" />
           </div>
           <span className="font-semibold tracking-tight">Scripta</span>
@@ -96,30 +96,5 @@ export const Navbar = () => {
       </header>
     </div>
   )
-  //  <nav className="flex p-2 bg-foreground text-text items-center">
-  //     <div className="absolute left-0 right-0">
-  //       <Link
-  //         key={charSeed}
-  //         className={tileStyle} //"flex scale-60 m-1" //scale-55
-  //         to="/scripta"
-  //       >
-  //         {[...title].map((ch, i) => (
-  //           <FlipLetter
-  //           key={`${i}`}
-  //           letter={ch}
-  //           index={i}
-  //           answer={charSeed}
-  //           delayMs={i * 120} // nice stagger
-  //           />
-  //         ))}
-  //       </Link>
-  //     </div>
-  //     {/* <div className="ml-auto">
-  //       <ThreeLineMenu/>
-  //     </div> */}
-  //     <div className='ml-auto'>
-  //       <HamburgerMenu />
-  //     </div>
-  //   </nav>
-  // );
+  
 }

@@ -14,6 +14,7 @@ import { About } from './pages/About';
 import { Record } from './pages/Record';
 import { Settings } from './pages/Settings';
 import { HowToPlay } from './pages/HowToPlay';
+import { GameModes } from './pages/GameModes';
 
 export default function App() {
   const location = useLocation();
@@ -31,6 +32,7 @@ export default function App() {
             <Route path="/scripta/free"   element={<Page><FreeGame /> </Page>} />
             <Route path="/scripta/statisics" element={<Page><Record /> </Page>} />
             <Route path="/scripta/how-to-play" element={<Page><HowToPlay /></Page>} />
+            <Route path="/scripta/modes" element={<Page><GameModes /></Page>} />
           </Routes>
         </motion.div>
       </AnimatePresence>
