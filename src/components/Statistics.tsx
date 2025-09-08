@@ -18,24 +18,24 @@ export const Statistics = ({
 }: StatisticsProps) => {
 
     return (
-        <div className="flex justify-evenly max-w-[720px] font-sans">
+        <div className="flex justify-evenly max-w-[720px] font-sans text-foreground">
             <div className="flexcolumn centered">
-                <div className="text-base text-text-page-bold font-bold">{totalGames}</div>
-                <div className="sub-text text-text-page/90">Played </div>
+                <div className="font-bold">{totalGames}</div>
+                <div className="sub-text text-foreground/50">Played </div>
             </div>
             <div className="flexcolumn centered">
-                <div className="text-base text-text-page-bold font-bold">{winRate}</div>
-                <div className="sub-text text-text-page/90">Win %</div>
+                <div className="font-bold">{winRate}</div>
+                <div className="sub-text text-foreground/50">Win %</div>
             </div>
             { hideStreak ? 
                 <>
                     <div className="flexcolumn centered">
-                        <div className="text-base text-text-page-bold font-bold">{streak}</div>
-                        <div className="sub-text text-text-page/90">Streak</div>
+                        <div className="font-bold">{streak}</div>
+                        <div className="sub-text text-foreground/50">Streak</div>
                     </div>
                     <div className="flexcolumn centered">
-                        <div className="text-base text-text-page-bold font-bold">{maxStreak}</div>
-                        <div className="sub-text text-text-page/90">Max Streak</div>
+                        <div className="font-bold">{maxStreak}</div>
+                        <div className="sub-text text-foreground/50">Max Streak</div>
                     </div>
                 </> : <></>
             }
@@ -53,7 +53,7 @@ export const Distribution = ({ distribution }: { distribution: number[] }) => {
 
             {distribution.map((count, index) => (
                 <div key={index} className="flex items-center gap-2">
-                    <div className="text-text-page w-6 text-right">
+                    <div className="text-foreground/70 w-6 text-right">
                         {index + 1}:
                     </div>
                     <Bar count={count} maxCount={maxCount} total={total} />
@@ -80,7 +80,7 @@ export const Bar = ({
 
     return (
         <div
-            className="h-6 text-text-page-bold px-2 flex items-center"
+            className="h-6 text-foreground px-2 flex items-center bg-blue-400"
             style={{ width: `${widthPercent}%` }}
         >
             {count} ({Math.round(percentOfTotal)}%)
@@ -92,8 +92,8 @@ export const GameModeStatistics = ( game: GameModeProperties ) => {
     const totalGames = game.wins + game.losses;
     return(
         <div className="flex flex-col w-full p-4 mt-4 mb-4">
-            <div className="text-2xl text-text-page-bold font-bold py-2">{game.name}</div>
-            <div className="text-md text-text-page mt-2 mb-2">STATISTICS:</div>
+            <div className="text-2xl text-foreground font-bold py-2">{game.name}</div>
+            <div className="text-md text-foreground mt-2 mb-2">STATISTICS:</div>
             <Statistics 
                 winRate={toPercentage(game.wins, totalGames)}
                 totalGames={totalGames} 
@@ -101,7 +101,7 @@ export const GameModeStatistics = ( game: GameModeProperties ) => {
                 maxStreak={game.maxStreak} 
                 hideStreak={game.name !== "Free Play"}
             />
-            <div className="text-md text-text-page mt-2 mb-2">GUESS DISTRIBUTION:</div>
+            <div className="text-md text-foreground mt-2 mb-2">GUESS DISTRIBUTION:</div>
             <Distribution distribution={game.distribution} />
         </div >
     );

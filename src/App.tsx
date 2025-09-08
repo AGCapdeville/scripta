@@ -13,6 +13,7 @@ import { FreeGame } from './pages/FreeGame';
 import { About } from './pages/About';
 import { Record } from './pages/Record';
 import { Settings } from './pages/Settings';
+import { HowToPlay } from './pages/HowToPlay';
 
 export default function App() {
   const location = useLocation();
@@ -28,7 +29,8 @@ export default function App() {
             <Route path="/scripta/settings" element={<Page><Settings /> </Page>} />
             <Route path="/scripta/daily"  element={<Page><DailyGame /> </Page>} />
             <Route path="/scripta/free"   element={<Page><FreeGame /> </Page>} />
-            <Route path="/scripta/stats" element={<Page><Record /> </Page>} />
+            <Route path="/scripta/statisics" element={<Page><Record /> </Page>} />
+            <Route path="/scripta/how-to-play" element={<Page><HowToPlay /></Page>} />
           </Routes>
         </motion.div>
       </AnimatePresence>

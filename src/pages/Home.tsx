@@ -144,7 +144,7 @@ export const HomePage = () => {
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
             <CTAButton href="/scripta/daily" icon={Play}>Play</CTAButton>
             <CTAButton href="/scripta/how-to-play" icon={HelpCircle} variant="outline">How to Play</CTAButton>
-            <CTAButton href="/scripta/stats" icon={BarChart3} variant="ghost">Statistics</CTAButton>
+            <CTAButton href="/scripta/statisics" icon={BarChart3} variant="ghost">Statistics</CTAButton>
             <CTAButton href="/scripta/settings" icon={Settings} variant="ghost">Settings</CTAButton>
           </div>
 
