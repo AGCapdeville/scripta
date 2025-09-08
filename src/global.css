@@ -6,90 +6,137 @@
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
 
-
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  --scale-size: 2.5rem;
+  --scale-color: hsla(0, 0%, 10%);
 }
 
 /* Light theme */
 :root[data-theme="light"] {
-  --text: 222 33% 93%;
-  --text-page: 0 0% 20%;
-  --text-page-bold: 0 0% 10%;
-  --background: 0 0% 90%;
-  --foreground: 220 8% 29%;
+  /* Background and foreground */
+  --background: hsla(0, 0%, 100%);       
+  --foreground: hsla(0 0% 10%);
 
-  --fade-in: 0 0% 100%;
+  /* Primary brand color */
+  --primary: hsla(243, 75%, 54%);       
+  --primary-foreground: hsla(0, 0%, 100%);
 
-  --letter-bg: 215 15% 15%;
-  --letter-text: 219 44% 94%;
-  --letter-correct: 111 53% 49%;
-  --letter-present: 253 83% 65%;
-  --letter-default: 225 22% 11%;
-  --letter-border: 227 17% 27%;
+  /* Borders and accents */
+  --border: hsla(220, 14%, 80%);        
+  --accent: hsla(240, 5%, 96%);         
+  --accent-foreground: hsla(0, 0%, 10%); 
 
-  --key-bg: 215 21% 11%;
-  --key-text: 219 44% 94%;
-  --key-correct: 111 53% 49%;
-  --key-present: 253 83% 65%;
-  --key-missing: 214 10% 31%;
-  --key-default: 212 9% 58%;
-  --key-border: 212 12% 21%;
+  /* Additional neutrals (optional but handy) */
+  --muted: hsla(0, 0%, 96%);            
+  --muted-foreground: hsla(220, 9%, 46%); 
+
+  /* Focus ring color */
+  --ring: var(--primary);
+
+  --fade-in: hsla(0 0% 100%);
+
+  --letter-text: hsla(0 0% 10%);
+  --letter-text-invert: hsla(0, 0%, 100%);
+  --letter-border: hsla(0 0% 66%);
+  --letter-bg-default: hsla(0 0% 100%);
+  --letter-bg-absent: hsla(0 0% 27%);
+  --letter-bg-present: hsla(253 83% 65%);
+  --letter-bg-correct: hsla(111 53% 49%);
+
+  --key-text: hsla(0, 0%, 100%);
+  --key-text-invert: hsla(0, 0%, 100%);
+  --key-border: hsla(0 0% 66%);
+  --key-bg-default: hsla(0, 0%, 66%);
+  --key-bg-absent: hsla(0, 0%, 27%);
+  --key-bg-present: hsla(253, 83%, 65%);
+  --key-bg-correct: hsla(111, 53%, 49%);
+
+  --scale-size: 2.5rem;
+  --scale-color: hsla(0, 0%, 10%);
 }
 
 /* Dark theme (fill with your real dark values; using same here as placeholder) */
 :root[data-theme="dark"] {
-  --text: 222 33% 93%;
-  --text-page: 0 0% 80%;
-  --text-page-bold: 0 0% 90%;
-  --background: 0 0% 10%;
-  --foreground: 220 8% 29%;
+  --background: hsla(0 0% 9%);
+  --foreground: hsla(0 0% 100%);
 
-  --fade-in: 0 0% 0%;
+  /* Primary brand color */
+  --primary: hsla(243, 75%, 54%);
+  --primary-foreground: hsla(0, 0%, 100%);
+  
+  /* Borders and accents */
+  --border: hsla(0, 0%, 60%);
+  --accent: hsla(0, 5%, 96%);
+  --accent-foreground: hsla(0, 0%, 10%);
 
-  --letter-bg: 215 15% 15%;
-  --letter-text: 219 44% 94%;
-  --letter-correct: 111 53% 49%;
-  --letter-present: 253 83% 65%;
-  --letter-default: 225 22% 11%;
-  --letter-border: 227 17% 27%;
+  /* Additional neutrals (optional but handy) */
+  --muted: hsla(0, 0%, 96%);
+  --muted-foreground: hsla(220, 9%, 46%);
+  
+  /* Focus ring color */
+  --ring: var(--primary);
 
-  --key-bg: 215 21% 11%;
-  --key-text: 219 44% 94%;
-  --key-correct: 111 53% 49%;
-  --key-present: 253 83% 65%;
-  --key-missing: 214 10% 31%;
-  --key-default: 212 9% 58%;
-  --key-border: 212 12% 21%;
+  --fade-in: hsla(0 0% 0%);
+
+  --letter-text: hsla(0 0% 94%);
+  --letter-text-invert: hsla(0, 0%, 94%);
+  --letter-border: hsla(0 0% 18%);
+  --letter-bg-default: hsla(0 0% 9%);
+  --letter-bg-absent: hsla(240 3% 18%);
+  --letter-bg-present: hsla(253 83% 65%);
+  --letter-bg-correct: hsla(111 53% 49%);
+
+  --key-text: hsla(0 0 94%);
+  --key-text-invert: hsla(0, 0%, 94%);
+  --key-border: hsla(0 0% 44%);
+  --key-bg-default: hsla(0 0% 44%);
+  --key-bg-absent: hsla(240 3% 18%);
+  --key-bg-present: hsla(253 83% 65%);
+  --key-bg-correct: hsla(111 53% 49%);
+
+  --scale-size: 2.5rem;
+  --scale-color: hsla(0, 0%, 10%, 0.06);
 }
 
 /* Tell Tailwind to generate color utilities from your tokens */
 @theme inline {
-  --color-background: hsl(var(--background));
-  --color-foreground: hsl(var(--foreground));
 
-  --color-fade-in: hsl(var(--fade-in));
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
 
-  --color-text: hsl(var(--text));
-  --color-text-page: hsl(var(--text-page));
-  --color-text-page-bold: hsl(var(--text-page-bold));
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
 
-  --color-letter-bg: hsl(var(--letter-bg));
-  --color-letter-text: hsl(var(--letter-text));
-  --color-letter-correct: hsl(var(--letter-correct));
-  --color-letter-present: hsl(var(--letter-present));
-  --color-letter-default: hsl(var(--letter-default));
-  --color-letter-border: hsl(var(--letter-border));
+  --color-border: var(--border);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
 
-  --color-key-bg: hsl(var(--key-bg));
-  --color-key-text: hsl(var(--key-text));
-  --color-key-correct: hsl(var(--key-correct));
-  --color-key-present: hsl(var(--key-present));
-  --color-key-missing: hsl(var(--key-missing));
-  --color-key-default: hsl(var(--key-default));
-  --color-key-border: hsl(var(--key-border));
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+
+  --color-ring: var(--ring);
+
+  --color-fade-in: var(--fade-in);
+
+  --color-letter-text: var(--letter-text);
+  --color-letter-text-invert: var(--letter-text-invert);
+  --color-letter-border: var(--letter-border);
+  --color-letter-bg-absent: var(--letter-bg-absent);
+  --color-letter-bg-default: var(--letter-bg-default);
+  --color-letter-bg-present: var(--letter-bg-present);
+  --color-letter-bg-correct: var(--letter-bg-correct);
+
+  --color-key-text: var(--key-text);
+  --color-key-text-invert: var(--key-text-invert);
+  --color-key-border: var(--key-border);
+  --color-key-bg-default: var(--key-bg-default);
+  --color-key-bg-absent: var(--key-bg-absent);
+  --color-key-bg-present: var(--key-bg-present);
+  --color-key-bg-correct: var(--key-bg-correct);
 }
 
 body {
@@ -98,3 +145,13 @@ body {
   box-sizing: border-box;
   overflow: hidden;
 }
+
+.scales {
+  pointer-events: none;
+  background-image:
+    radial-gradient(circle at 50% 150%, var(--scale-color) 24%, transparent 25%),
+    radial-gradient(circle at 50% -50%, var(--scale-color) 24%, transparent 25%);
+  background-size: var(--scale-size) var(--scale-size);
+  background-position: 0 0, calc(var(--scale-size) / 2) calc(var(--scale-size) / 2);
+}
+

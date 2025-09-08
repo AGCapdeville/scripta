@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import seedrandom from 'seedrandom';
 
 import { Word } from '../components/Word';
@@ -8,6 +8,7 @@ import wordJSON from "../assets/wordList.json";
 import { Results } from '../components/Results';
 
 import { useNavigate } from "react-router-dom";
+
 
 const getDailySeed = (ns = 'my-game'): string => {
   const todayUTC = new Date().toISOString().slice(0, 10); // "YYYY-MM-DD"
@@ -43,11 +44,18 @@ export const DailyGame = () => {
   const [outcome, setOutcome] = useState(false);
   const [revealModal, setRevealModal] = useState(false);
 
-  const [guessedLetters, setGuessedLetters] = useState<string[]>([]);
-  const [almostLetters, setAlmostLetters] = useState<string[]>([]);
+  const [absentLetters, setAbsentLetters] = useState<string[]>([]);
+  const [presentLetters, setPresentLetters] = useState<string[]>([]);
   const [correctLetters, setCorrectLetters] = useState<string[]>([]);
   const navigate = useNavigate();
 
+  // 1) constants & derived
+  const WORD_LENGTH = 5;
+  const fiveLetterWords = useMemo(
+    () => (wordJSON as string[]).filter((w) => w.length === WORD_LENGTH),
+    []
+  );
+  
   const closeHandler = () => {
     setShowResults(false);
     setRevealModal(false);
@@ -55,18 +63,20 @@ export const DailyGame = () => {
   };
 
   const fetchSecretWord = async () => {
-
-    const fiveLetterWords = wordJSON.filter((w: string) => w.length === 5);
     const word = getDailyWord(fiveLetterWords);
-    
+    console.log("answer : " + word);
     try {
-      setSecretWord(word);
+      setSecretWord(word.toUpperCase());
     } catch (error) {
       console.error('Error fetching word:', error);
     } finally {
       setLoading(false);
     }
   };
+  // Do once and forget...
+  useEffect(() => {
+    fetchSecretWord();
+  }, []);
 
   useEffect(() => {
     if (!save) return;
@@ -81,10 +91,46 @@ export const DailyGame = () => {
     }
   }, [save])
 
-  // Do once and forget...
-  useEffect(() => {
-    fetchSecretWord();
-  }, []);
+  const validWordSet = useMemo(() => new Set(fiveLetterWords), [fiveLetterWords]);
+  const currentGuess = useMemo(() => word.replace(/ /g, ""), [word]);
+  const isValid = (w: string) => validWordSet.has(w.toLowerCase());
+  const padToLen = (s: string) => (s + " ".repeat(WORD_LENGTH)).slice(0, WORD_LENGTH);
+
+  // 2) key handlers
+  const addCharToCurrentGuess = (ch: string) => {
+    setWord((prev) => {
+      const raw = prev.replace(/ /g, "");
+      if (raw.length >= WORD_LENGTH) return prev;
+      return padToLen(raw + ch.toUpperCase());
+    });
+  };
+  const removeLastCharFromCurrentGuess = () => {
+    setWord((prev) => {
+      const raw = prev.replace(/ /g, "");
+      if (raw.length === 0) return prev;
+      return padToLen(raw.slice(0, -1));
+    });
+  };
+
+  // 3) submit wrapper
+  const submitGuess = useCallback(() => {
+    if (currentGuess.length !== WORD_LENGTH || !isValid(currentGuess)) return;
+    saveWord(true);
+  }, [currentGuess, isValid]);
+
+  // 4) key states
+  type KeyState = "correct" | "present" | "absent";
+
+  const keyStates: Record<string, KeyState | undefined> = useMemo(() => {
+    const map: Record<string, KeyState> = {};
+    absentLetters.forEach((l) => { map[l.toUpperCase()] = "absent"; });
+    presentLetters.forEach((l) => { map[l.toUpperCase()] = "present"; });
+    correctLetters.forEach((l) => { map[l.toUpperCase()] = "correct"; });
+    return map;
+  }, [absentLetters, presentLetters, correctLetters]);
+
+  // 5) flags
+  const canSubmit = currentGuess.length === WORD_LENGTH && isValid(currentGuess);
 
   return (
     <div className='bg-background h-full w-full min-h-screen text-text-page'>
@@ -98,25 +144,24 @@ export const DailyGame = () => {
             saveWord={saveWord}
             attempts={attempts}
             setAttempts={setAttempts} 
-            guessedLetters={guessedLetters}
-            setGuessedLetters={setGuessedLetters}
-            almostLetters={almostLetters}
-            setAlmostLetters={setAlmostLetters}
+            absentLetters={absentLetters}
+            setAbsentLetters={setAbsentLetters}
+            presentLetters={presentLetters}
+            setPresentLetters={setPresentLetters}
             correctLetters={correctLetters}
             setCorrectLetters={setCorrectLetters}
           />
         </div>
       }
 
-      <div className='wordKeyboard'>
-        <Keys 
-          word={word} 
-          setWord={setWord} 
-          saveWord={saveWord}
-          resultsShown={showResults}
-          guessedLetters={guessedLetters}
-          almostLetters={almostLetters}
-          correctLetters={correctLetters}
+      <div className='fixed bottom-0 w-full'>
+        <Keys
+          onChar={addCharToCurrentGuess}
+          onDelete={removeLastCharFromCurrentGuess}
+          submitGuess={submitGuess}
+          canSubmit={canSubmit}
+          keyStates={keyStates}
+          disabled={showResults}
         />
       </div>
 

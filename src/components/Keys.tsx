@@ -1,228 +1,182 @@
-import { useEffect, useRef } from 'react';
-import styled, { css } from 'styled-components';
+// Keys.tsx
+import React, { useCallback, useEffect, useMemo, useRef } from "react";
 
-const LetterButton = styled.div<{ $status: number }>`
-  width: 10vw;
-  height: 50px;
+type KeyState = "correct" | "present" | "absent" | undefined;
 
-  display: flex;
-  justify-content: center;
-  align-items: center;
+type KeysProps = {
+  // Called when user enters a letter (A-Z)
+  onChar: (ch: string) => void;
+  // Called on backspace/delete
+  onDelete: () => void;
+  // Called when user submits; guarded so it only runs once until resolved
+  submitGuess: () => Promise<void> | void;
 
-  color: white;
-  text-decoration: none;
+  // Whether the current row/guess is submit-ready (e.g., correct length and passes basic checks)
+  canSubmit: boolean;
 
-  font-size: 14px;
-  margin: 0;
+  // Optional: map letters to their color/state for the UI
+  keyStates?: Record<string, KeyState>;
 
-  ${({ $status }) => {
-    switch ($status) {
-      case 0:
-        return css`
-          background-color: #818385;
-          border-color: #818385;
-        `;
-      case 1:
-        return css`
-          background-color: #3a393c;
-          border-color: #3a393c;
-        `;      
-      case 2:
-        return css`
-          background-color: #b99d42;
-          border-color: #b99d42;
-        `;  
-      case 3:
-        return css`
-          background-color: #508c50;
-          border-color: #508c50;
-        `; 
-      default:
-        return null;
+  // Optional: disable entire keyboard
+  disabled?: boolean;
+};
+
+const ROWS = [
+  ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"],
+  ["A", "S", "D", "F", "G", "H", "J", "K", "L"],
+  ["ENTER", "Z", "X", "C", "V", "B", "N", "M", "DEL"],
+];
+
+export const Keys = ({
+  onChar,
+  onDelete,
+  submitGuess,
+  canSubmit,
+  keyStates = {},
+  disabled = false,
+}: KeysProps) => {
+  // Prevent double submits (rapid Enter taps, on-screen + hardware overlap, etc.)
+  const submittingRef = useRef(false);
+
+  const trySubmit = useCallback(async () => {
+    if (disabled || submittingRef.current || !canSubmit) return;
+    
+    submittingRef.current = true;
+    
+    try {
+      await Promise.resolve(submitGuess());
+    } finally {
+      // allow the next submit after saveWord completes (success or fail)
+      submittingRef.current = false;
     }
-  }}
 
-  border-radius: 11%;
-  border-color: #818385;
+  }, [disabled, canSubmit, submitGuess]);
 
-  text-transform: uppercase;
-  font-weight: bold;
-  user-select: none;
+  const handleKey = useCallback(
+    (raw: string) => {
+      if (disabled) return;
 
-  @media (min-width: 450px) {
-  /* Styles for the smallest phones */
-    width: 43px;
-    height: 50px;
-  }
+      const key = raw.toUpperCase();
 
-`;
-
-const EnterButton = styled.button`
-  width: 13vw;
-  height: 50px;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  color: white;
-  text-decoration: none;
-
-  font-size: 9px;
-  margin: 0;
-  background-color: #818385;
-
-  border-radius: 11%;
-  border-color: #818385;
-
-  text-transform: uppercase;
-  font-weight: bold;
-  user-select: none;
-
-  @media (min-width: 450px) {
-  /* Styles for the smallest phones */
-    width: 60px;
-    font-size: 12px;
-  }
-`;
-
-const Row = styled.div`
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  gap: 2px;
-  padding-top: 2px;
-  padding-bottom: 2px;
-`;
-
-const Keyboard = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-
-let qwerty = ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'enter', 'z', 'x', 'c', 'v', 'b', 'n', 'm', 'delete'];
-
-export const Type = (letter: string, word: string, setWword: React.Dispatch<React.SetStateAction<string>>) => {
-  let newWord = word.trim();
-  newWord = newWord + letter;
-  newWord.padEnd(5);
-  if (newWord.length < 6) {
-    setWword(newWord.padEnd(5));
-  }
-}
-
-export const Backspace = (word: string, setWword: React.Dispatch<React.SetStateAction<string>>) => {
-  let newWord = word.trim().substring(0, (word.trim().length - 1));
-  setWword(newWord.padEnd(5));
-}
-
-export const useKeyboardListener = (
-  word: string,
-  setWord: React.Dispatch<React.SetStateAction<string>>,
-  saveWord: React.Dispatch<React.SetStateAction<boolean>>,
-  resultsShown: boolean
-) => {
-
-  const wordRef = useRef(word);
-  const resultsShownRef = useRef(resultsShown);
-
-  // Keep the ref up to date with the latest word
-  useEffect(() => {
-    wordRef.current = word;
-    resultsShownRef.current = resultsShown;
-  }, [word, resultsShown]);
-
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.defaultPrevented) return;
-
-      if (resultsShownRef.current) return; // Game Over
-
-      const key = event.key.toLowerCase(); // normalize
-      if (qwerty.includes(key) && key !== "enter" && key != "return") {
-        Type(key, wordRef.current, setWord);
-      } else if (key === "backspace") {
-        Backspace(wordRef.current, setWord);
-      } else if (key === "enter") {
-        saveWord(true);
+      if (key === "ENTER") {
+        // submit only when allowed
+        void trySubmit();
+        return;
       }
 
-      event.preventDefault();
-    }
+      if (key === "BACKSPACE" || key === "DEL" || key === "DELETE") {
+        onDelete();
+        return;
+      }
 
-    window.addEventListener('keydown', handleKeyDown, true);
+      if (/^[A-Z]$/.test(key)) {
+        onChar(key);
+      }
+    },
+    [disabled, onChar, onDelete, trySubmit]
+  );
 
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown, true);
+  // Hardware keyboard handler
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      // Avoid interfering with inputs/textareas
+      const target = e.target as HTMLElement | null;
+      const tag = (target?.tagName || "").toLowerCase();
+      if (tag === "input" || tag === "textarea" || target?.isContentEditable) return;
+
+      // Normalize keys we care about
+      const { key } = e;
+
+      // Prevent scroll on space/backspace, and form submits on Enter
+      if (key === "Enter" || key === "Backspace") {
+        e.preventDefault();
+      }
+
+      // Route it
+      handleKey(key);
     };
-  }, []); // Empty deps array ensures listener is added once
-}
 
-type Props = {
-  word: string;
-  setWord: React.Dispatch<React.SetStateAction<string>>; // @Question : Is this the best way to do this...
-  saveWord: React.Dispatch<React.SetStateAction<boolean>>;
-  resultsShown: boolean;
-  guessedLetters: Array<string>;
-  almostLetters: Array<string>;
-  correctLetters: Array<string>;
-}
+    window.addEventListener("keydown", onKeyDown, { passive: false });
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [handleKey]);
 
-export const Keys = ({ 
-  word, 
-  setWord, 
-  saveWord,
-  resultsShown,
-  guessedLetters, 
-  almostLetters, 
-  correctLetters
-}: Props) => {
+  const classesFor = useCallback(
+    (label: string) => {
+      // basic Tailwind-ish classes — adjust to your design system
+      const base =
+        "rounded-md px-2 sm:px-3 md:px-4 " +        // horizontal padding scales
+        "h-10 sm:h-14 md:h-16 " +                    // key height scales
+        "text-[12px] sm:text-xs md:text-sm font-bold uppercase " + // text size scales
+        "flex items-center justify-center " +
+        "transition-colors duration-150 active:scale-95 disabled:opacity-50 disabled:pointer-events-none ";
+        
 
+      const wide = label === "ENTER" || label === "DEL" ? " basis-1 p-1 m-1" : "";
+      const state = keyStates[label] as KeyState;
 
-  useKeyboardListener(word, setWord, saveWord, resultsShown);
+      let color = "bg-key-bg-default text-key-text"; // default key
+      if (state === "correct") color = "bg-key-bg-correct text-key-text-invert";
+      else if (state === "present") color = "bg-key-bg-present text-key-text-invert";
+      else if (state === "absent") color = "bg-key-bg-absent text-key-text-invert";
 
-  const rowLengths = [10, 9, 10];
-  let rows: string[][] = [];
-  let index = 0;
+      return `${base} ${color}${wide}`;
+    },
+    [keyStates]
+  );
 
-  for (const length of rowLengths) {
-    rows.push(qwerty.slice(index, index + length));
-    index += length;
-  }
-  
+  const layout = useMemo(() => ROWS, []);
+
   return (
-    <>
-      <Keyboard>
-        {rows.map((row, rowIndex) => (
-          <Row key={rowIndex}>
-            {row.map((letter) => {
-              if (letter == "enter") {
-                return (<EnterButton key={letter + "_bttn"} onClick={() => saveWord(true)}>{letter}</EnterButton>);
-              } else if (letter == "delete") {
-                return (<EnterButton key={letter + "_bttn"} onClick={() => Backspace(word, setWord)}>{letter}</EnterButton>);
-              } else {
+    // <div className="flex flex-col items-center select-none w-full" aria-label="Keyboard">
+    <div className="w-full max-w-[640px] sm:max-w-[720px] mx-auto px-2 select-none" aria-label="Keyboard">
 
-                if (correctLetters.includes(letter)) {
-                  return (<LetterButton $status={3} key={letter + "_key"} onClick={() => Type(letter, word, setWord)}>{letter}</LetterButton>)
-                }
+      {layout.map((row, rIdx) => {
+        const gridCols =
+          rIdx === 0 ? "grid-cols-10" :
+          rIdx === 1 ? "grid-cols-9" :
+            "grid-cols-11"; // last row has 9 letters + ENTER + DEL
 
-                if (almostLetters.includes(letter)) {
-                  return (<LetterButton $status={2} key={letter + "_key"} onClick={() => Type(letter, word, setWord)}>{letter}</LetterButton>)
-                }
+        return (
+          <div
+            key={`row-${rIdx}`}
+            className={`grid ${gridCols} gap-2 py-1 w-full`}
+            role="row"
+          >
+          {row.map((label) => {
+            const isAction = label === "ENTER" || label === "DEL";
+            const span = isAction && rIdx === 2 ? "col-span-2" : "col-span-1";            
+          
+            return (  
+              <button
+                key={label}
+                type="button"
+                role="button"
+                aria-label={label === "DEL" ? "Delete" : label}
+                data-key={label}
+                disabled={disabled || (label === "ENTER" && !canSubmit)}
+                // className={classesFor(label)}
+                className={`${classesFor(label)} ${span}`}
+                onMouseDown={(e) => {
+                  // onMouseDown avoids losing focus on mobile
+                  e.preventDefault();
+                  handleKey(label === "DEL" ? "Backspace" : label);
+                }}
+                onKeyDown={(e) => {
+                  // Allow Enter/Space to "press" focused on-screen key for accessibility
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    handleKey(label === "DEL" ? "Backspace" : label);
+                  }
+                }}
+              >
+                {label === "DEL" ? "⌫" : label}
+              </button>
+            )
+          })}
+          </div>
+        )}
+      )}
 
-                if (guessedLetters.includes(letter)) {
-                  return (<LetterButton $status={1} key={letter + "_key"} onClick={() => Type(letter, word, setWord)}>{letter}</LetterButton>)
-                }
-
-                return (<LetterButton $status={0} key={letter + "_key"} onClick={() => Type(letter, word, setWord)}>{letter}</LetterButton>)
-              
-              }
-            })}
-          </Row>
-        ))}
-      </Keyboard>    
-    </>
-  )
-
+    </div>
+  );
 }

@@ -1,33 +1,11 @@
 import { useEffect, useRef, useState } from "react";
-import { Link } from 'react-router-dom';
+import { Link, LinkProps } from 'react-router-dom';
 
 export const ThreeLineMenu = () => {
     const [open, setOpen] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
     const btnRef = useRef<HTMLButtonElement>(null);
 
-    // Close on outside click
-    useEffect(() => {
-        if (!open) return;
-        const onClick = (e: MouseEvent) => {
-            if (!menuRef.current) return;
-            if (
-                !menuRef.current.contains(e.target as Node) &&
-                !btnRef.current?.contains(e.target as Node)
-            ) {
-                setOpen(false);
-            }
-        };
-        const onKey = (e: KeyboardEvent) => {
-            if (e.key === "Escape") setOpen(false);
-        };
-        window.addEventListener("click", onClick);
-        window.addEventListener("keydown", onKey);
-        return () => {
-            window.removeEventListener("click", onClick);
-            window.removeEventListener("keydown", onKey);
-        };
-    }, [open]);
 
     return (
         <div className="relative inline-block text-left">
@@ -109,6 +87,121 @@ export const ThreeLineMenu = () => {
                         onClick={() => setOpen(false)}>
                         Settings
                     </Link>
+                </nav>
+            </div>
+        </div>
+    );
+}
+
+type LinkButtonProps = {
+    to: LinkProps["to"];
+    children: React.ReactNode;
+    className?: string;
+    clickFunction?: () => void;
+};
+
+export const LinkButton = ({ to, children, className, clickFunction}: LinkButtonProps) => {
+    return (
+        <Link 
+            to={to} 
+            className={className}
+            onClick={clickFunction}
+        >
+            {children}
+        </Link>
+    );
+}
+
+
+export const HamburgerMenu = () => {
+    const [open, setOpen] = useState(false);
+
+    return (
+        <div className="relative">
+            {/* Hamburger Button */}
+            <button
+                onClick={() => setOpen(true)}
+                className="p-2 rounded-md hover:bg-slate-800 focus:outline-none"
+                aria-label="Open menu"
+            >
+                {/* Simple Hamburger Icon */}
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6 text-foreground/70 hover:text-foreground transition"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
+
+            {/* Overlay (click to close) */}
+            {open && (
+                <div
+                    // className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm"
+                    onClick={() => setOpen(false)}
+                />
+            )}
+
+            {/* Slide-in Panel */}
+            <div
+                className={`fixed top-0 right-0 z-50 h-full w-64 bg-background shadow-xl transform transition-transform duration-300 ease-in-out
+                ${open ? "translate-x-0" : "translate-x-full"}`}
+            >
+                {/* Close Button */}
+                <div className="flex justify-end p-4">
+                    <button
+                        onClick={() => setOpen(false)}
+                        aria-label="Close menu"
+                        className="p-2 rounded-md hover:bg-background-800"
+                    >
+                        ✕
+                    </button>
+                </div>
+
+                {/* Menu Content */}
+                <nav className="w-full flex flex-col text-foreground/70 hover:text-foreground transition gap-4 ">
+                    <LinkButton 
+                        to="/scripta/"
+                        className="px-3 py-2 hover:text-violet-400 hover:bg-black"
+                        clickFunction={() => setOpen(false)}
+                    >
+                        Home
+                    </LinkButton>
+                    <LinkButton
+                        to="/scripta/daily"
+                        className="pl-4 hover:text-violet-400 hover:bg-black"
+                        clickFunction={() => setOpen(false)}
+                    >
+                        Daily
+                    </LinkButton>
+                    {/* <Link to="scripta/modes"
+                        className="px-3 py-2 text-sm "
+                    >
+                        Game Modes
+                    </Link>
+                    <Link to="scripta/how-to-play"
+                        className="px-3 py-2 text-sm "
+                    >
+                        How to Play
+                    </Link>
+                    <Link to="scripta/statisics"
+                        className="px-3 py-2 text-sm "
+                    >
+                        Statistics
+                    </Link>
+                    <Link to="scripta/settings"
+                        className="px-3 py-2 text-sm "
+                    >
+                        Settings
+                    </Link>
+                    <Link to="scripta/about"
+                        className="px-3 py-2 text-sm "
+                    >
+                        About
+                    </Link> */}
+
                 </nav>
             </div>
         </div>

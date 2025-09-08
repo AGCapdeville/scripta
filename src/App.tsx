@@ -7,7 +7,7 @@ import { Navbar } from './components/Navbar';
 import { Page } from './components/Framer';
 
 // Pages
-import { Home } from './pages/Home';
+import { Home, HomePage} from './pages/Home';
 import { DailyGame } from './pages/DailyGame';
 import { FreeGame } from './pages/FreeGame';
 import { About } from './pages/About';
@@ -23,12 +23,12 @@ export default function App() {
       <AnimatePresence mode="wait" initial={false}> {/* ensures exit finishes before enter */}
         <motion.div key={location.pathname}>
           <Routes location={location} key={location.pathname}>
-            <Route path="/scripta/"       element={<Page><Home /> </Page>} />
+            <Route path="/scripta/" element={<Page><HomePage /> </Page>} />
             <Route path="/scripta/about"  element={<Page><About /> </Page>} />
             <Route path="/scripta/settings" element={<Page><Settings /> </Page>} />
             <Route path="/scripta/daily"  element={<Page><DailyGame /> </Page>} />
             <Route path="/scripta/free"   element={<Page><FreeGame /> </Page>} />
-            <Route path="/scripta/record" element={<Page><Record /> </Page>} />
+            <Route path="/scripta/stats" element={<Page><Record /> </Page>} />
           </Routes>
         </motion.div>
       </AnimatePresence>

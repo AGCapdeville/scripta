@@ -18,7 +18,7 @@ export const Statistics = ({
 }: StatisticsProps) => {
 
     return (
-        <div style={{ display: "flex", justifyContent: "space-evenly", maxWidth: 720, fontFamily: "system-ui, sans-serif" }}>
+        <div className="flex justify-evenly max-w-[720px] font-sans">
             <div className="flexcolumn centered">
                 <div className="text-base text-text-page-bold font-bold">{totalGames}</div>
                 <div className="sub-text text-text-page/90">Played </div>
@@ -49,16 +49,16 @@ export const Distribution = ({ distribution }: { distribution: number[] }) => {
     const maxCount = distribution.length ? Math.max(...distribution) : 0;
 
     return (
-        <div className="distribution" style={{ display: "grid", gap: "8px" }}>
+        <div className="grid gap-2">
 
             {distribution.map((count, index) => (
-                <div key={index} className="distribution-row">
-                    <div className="distribution-number text-text-page">
+                <div key={index} className="flex items-center gap-2">
+                    <div className="text-text-page w-6 text-right">
                         {index + 1}:
                     </div>
                     <Bar count={count} maxCount={maxCount} total={total} />
+                    <div className="h-4" /> 
                 </div>
-
             ))}
         </div>
     );
@@ -80,7 +80,7 @@ export const Bar = ({
 
     return (
         <div
-            className="bar"
+            className="h-6 text-text-page-bold px-2 flex items-center"
             style={{ width: `${widthPercent}%` }}
         >
             {count} ({Math.round(percentOfTotal)}%)
@@ -91,7 +91,7 @@ export const Bar = ({
 export const GameModeStatistics = ( game: GameModeProperties ) => {
     const totalGames = game.wins + game.losses;
     return(
-        <div className="w-full h-full max-w-3xl p-4">
+        <div className="flex flex-col w-full p-4 mt-4 mb-4">
             <div className="text-2xl text-text-page-bold font-bold py-2">{game.name}</div>
             <div className="text-md text-text-page mt-2 mb-2">STATISTICS:</div>
             <Statistics 

@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { FlipLetter } from "./Letter";
 import dictJSON from "../assets/dictionary.json";
 
+const LetterContainer = "flex justify-center w-full gap-[5px] py-[2px]";
+
 type WordProps = {
   word: string;
   setWord: React.Dispatch<React.SetStateAction<string>>;
@@ -10,10 +12,10 @@ type WordProps = {
   saveWord: React.Dispatch<React.SetStateAction<boolean>>;
   attempts: number;
   setAttempts: React.Dispatch<React.SetStateAction<number>>;
-  guessedLetters: Array<string>;
-  setGuessedLetters: React.Dispatch<React.SetStateAction<Array<string>>>;
-  almostLetters: Array<string>;
-  setAlmostLetters: React.Dispatch<React.SetStateAction<Array<string>>>;
+  absentLetters: Array<string>;
+  setAbsentLetters: React.Dispatch<React.SetStateAction<Array<string>>>;
+  presentLetters: Array<string>;
+  setPresentLetters: React.Dispatch<React.SetStateAction<Array<string>>>;
   correctLetters: Array<string>;
   setCorrectLetters: React.Dispatch<React.SetStateAction<Array<string>>>;
 };
@@ -26,10 +28,10 @@ export const Word = ({
   saveWord,
   attempts,
   setAttempts,
-  guessedLetters,
-  setGuessedLetters,
-  almostLetters,
-  setAlmostLetters,
+  absentLetters,
+  setAbsentLetters,
+  presentLetters,
+  setPresentLetters,
   correctLetters,
   setCorrectLetters,
 }: WordProps) => {
@@ -39,22 +41,27 @@ export const Word = ({
 
   useEffect(() => {
     if (!save) return;
+    saveWord(false);
 
     if (wordSet.has(word.toLowerCase()) && word.trim().length === 5) {
 
-      let guessed = [...guessedLetters];
-      let almost = [...almostLetters];
+      console.log(word);
+
+      console.log("s:" + secretWord);
+
+      let absent = [...absentLetters];
+      let present = [...presentLetters];
       let correct = [...correctLetters];
 
       [...word].forEach((char, index) => {
-        if (!guessed.includes(char)) guessed = [...guessed, char];
-        if (secretWord[index] === char) correct = [...correct, char];
-        if (secretWord.includes(char) && !almost.includes(char)) almost = [...almost, char];
+        if (!absent.includes(char)) absent = [...absent, char];
+        if (secretWord[index] === char) correct = [...correct, char]; // Have to check to see if correct first
+        if (secretWord.includes(char) && !present.includes(char)) present = [...present, char]; // If correct but not in the correct location
       });
 
-      if (guessed.length > guessedLetters.length) setGuessedLetters([...guessed]);
+      if (absent.length > absentLetters.length) setAbsentLetters([...absent]);
       if (correct.length > correctLetters.length) setCorrectLetters([...correct]);
-      if (almost.length > almostLetters.length) setAlmostLetters([...almost]);
+      if (present.length > presentLetters.length) setPresentLetters([...present]);
 
       setAttempts(attempts + 1);
       setSubmittedWords([...submittedWords, word.trim()]);
@@ -64,7 +71,6 @@ export const Word = ({
       setTimeout(() => setShake(false), 500);
     }
 
-    saveWord(false);
   }, [save]);
 
   useEffect(() => {
@@ -78,18 +84,14 @@ export const Word = ({
 
         {/* Number of Attempts place holders */}
         {[0, 1, 2, 3, 4, 5].map((rowIndex) => (
-          <div
-            key= {"wordPlaceHolder" + rowIndex}
-            className={
-              "flex justify-center w-full gap-[5px] py-[2px]"
-            }
-          >
-            {[0, 1, 2, 3, 4].map((index) => 
+          <div key={"wordPlaceHolder" + rowIndex} className={LetterContainer}>
+            {[0, 1, 2, 3, 4].map((index) =>
               <FlipLetter
                 key={`${rowIndex}-${index}`}
                 letter={" "}
                 index={index}
                 answer={secretWord}
+                placeholder={true}
                 delayMs={index * 120} // nice stagger
               />
             )}
@@ -98,16 +100,18 @@ export const Word = ({
 
         {/* WordBox -> absolute overlay stack of played & current rows */}
         <div className="flex flex-col absolute">
+
           {/* Submitted rows */}
           {submittedWords.map((submittedWord, rowIndex) => (
-            <div key={rowIndex} className="flex justify-center w-full gap-[5px] py-[2px]">
+            <div key={rowIndex} className={LetterContainer}>
               {[...submittedWord].map((ch, i) => (
-                <div className="bg-black ">
+                <div className="bg-background">
                   <FlipLetter
                     key={`${rowIndex}-${i}`}
                     letter={ch}
                     index={i}
                     answer={secretWord}
+                    placeholder={false}
                     delayMs={i * 120} // nice stagger
                   />
                 </div>
@@ -120,8 +124,7 @@ export const Word = ({
             <div
               id="currentWord"
               className={
-                "flex justify-center w-full gap-[5px] py-[2px] " +
-                (shake ? "animate-[shake_0.5s_ease-in-out]" : "")
+                 LetterContainer  //+ (shake ? `animate-[shake_0.5s_ease-in-out]` : ``)
               }
             >
               {[...word].map((letter, index) => (
@@ -130,6 +133,7 @@ export const Word = ({
                   letter={letter}
                   index={index}
                   answer={""}
+                  placeholder={true}
                   delayMs={index * 120} // nice stagger
                 />
               ))}

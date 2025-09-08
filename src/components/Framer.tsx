@@ -16,7 +16,7 @@ const overlay = {
 export function Page({ children }: PropsWithChildren) {
     return (
         <motion.main
-            className="relative min-h-screen bg-fade-in" // ensures no white flash behind
+            className="relative min-h-screen bg-background" // ensures no white flash behind
             variants={page}
             initial="initial"
             animate="animate"

@@ -1,7 +1,7 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom';
-import './global.css'
+import './Global.css'
 import App from './App'
 
 import { loadPlayerData } from './utility/UserData';
