@@ -11,9 +11,6 @@ type KeysProps = {
   // Called when user submits; guarded so it only runs once until resolved
   submitGuess: () => Promise<void> | void;
 
-  // Whether the current row/guess is submit-ready (e.g., correct length and passes basic checks)
-  canSubmit: boolean;
-
   // Optional: map letters to their color/state for the UI
   keyStates?: Record<string, KeyState>;
 
@@ -31,26 +28,10 @@ export const Keys = ({
   onChar,
   onDelete,
   submitGuess,
-  canSubmit,
   keyStates = {},
   disabled = false,
 }: KeysProps) => {
   // Prevent double submits (rapid Enter taps, on-screen + hardware overlap, etc.)
-  const submittingRef = useRef(false);
-
-  const trySubmit = useCallback(async () => {
-    if (disabled || submittingRef.current || !canSubmit) return;
-    
-    submittingRef.current = true;
-    
-    try {
-      await Promise.resolve(submitGuess());
-    } finally {
-      // allow the next submit after saveWord completes (success or fail)
-      submittingRef.current = false;
-    }
-
-  }, [disabled, canSubmit, submitGuess]);
 
   const handleKey = useCallback(
     (raw: string) => {
@@ -59,8 +40,7 @@ export const Keys = ({
       const key = raw.toUpperCase();
 
       if (key === "ENTER") {
-        // submit only when allowed
-        void trySubmit();
+        submitGuess()
         return;
       }
 
@@ -73,7 +53,7 @@ export const Keys = ({
         onChar(key);
       }
     },
-    [disabled, onChar, onDelete, trySubmit]
+    [disabled, onChar, onDelete]
   );
 
   // Hardware keyboard handler
@@ -149,18 +129,15 @@ export const Keys = ({
             return (  
               <button
                 key={label}
-                type="button"
-                role="button"
-                aria-label={label === "DEL" ? "Delete" : label}
-                data-key={label}
-                disabled={disabled || (label === "ENTER" && !canSubmit)}
-                // className={classesFor(label)}
+                disabled={disabled}
                 className={`${classesFor(label)} ${span}`}
+
                 onMouseDown={(e) => {
                   // onMouseDown avoids losing focus on mobile
                   e.preventDefault();
                   handleKey(label === "DEL" ? "Backspace" : label);
                 }}
+                
                 onKeyDown={(e) => {
                   // Allow Enter/Space to "press" focused on-screen key for accessibility
                   if (e.key === "Enter" || e.key === " ") {
@@ -180,3 +157,4 @@ export const Keys = ({
     </div>
   );
 }
+

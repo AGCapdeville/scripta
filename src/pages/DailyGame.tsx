@@ -4,10 +4,14 @@ import seedrandom from 'seedrandom';
 import { Word } from '../components/Word';
 import { Keys } from '../components/Keys';
 
-import wordJSON from "../assets/wordList.json";
+import wordJSON from '../assets/wordList.json';
+
 import { Results } from '../components/Results';
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
+import { isValidWord } from '../utility/Dictionary';
+
+const WORD_LENGTH = 5;
 
 
 const getDailySeed = (ns = 'my-game'): string => {
@@ -44,17 +48,18 @@ export const DailyGame = () => {
   const [outcome, setOutcome] = useState(false);
   const [revealModal, setRevealModal] = useState(false);
 
+  const [isValid, setIsValid] = useState<boolean>(false);
+  
   const [absentLetters, setAbsentLetters] = useState<string[]>([]);
   const [presentLetters, setPresentLetters] = useState<string[]>([]);
   const [correctLetters, setCorrectLetters] = useState<string[]>([]);
   const navigate = useNavigate();
 
-  // 1) constants & derived
-  const WORD_LENGTH = 5;
   const fiveLetterWords = useMemo(
     () => (wordJSON as string[]).filter((w) => w.length === WORD_LENGTH),
     []
   );
+
   
   const closeHandler = () => {
     setShowResults(false);
@@ -62,9 +67,16 @@ export const DailyGame = () => {
     navigate('/scripta/');
   };
 
+  const padToLen = (s: string) => (s + " ".repeat(WORD_LENGTH)).slice(0, WORD_LENGTH);
+
+  // Do once and forget...
+  useEffect(() => {
+    fetchSecretWord();
+  }, []);
+
+
   const fetchSecretWord = async () => {
     const word = getDailyWord(fiveLetterWords);
-    console.log("answer : " + word);
     try {
       setSecretWord(word.toUpperCase());
     } catch (error) {
@@ -73,10 +85,6 @@ export const DailyGame = () => {
       setLoading(false);
     }
   };
-  // Do once and forget...
-  useEffect(() => {
-    fetchSecretWord();
-  }, []);
 
   useEffect(() => {
     if (!save) return;
@@ -91,12 +99,8 @@ export const DailyGame = () => {
     }
   }, [save])
 
-  const validWordSet = useMemo(() => new Set(fiveLetterWords), [fiveLetterWords]);
-  const currentGuess = useMemo(() => word.replace(/ /g, ""), [word]);
-  const isValid = (w: string) => validWordSet.has(w.toLowerCase());
-  const padToLen = (s: string) => (s + " ".repeat(WORD_LENGTH)).slice(0, WORD_LENGTH);
 
-  // 2) key handlers
+  // Key handlers
   const addCharToCurrentGuess = (ch: string) => {
     setWord((prev) => {
       const raw = prev.replace(/ /g, "");
@@ -112,13 +116,18 @@ export const DailyGame = () => {
     });
   };
 
-  // 3) submit wrapper
-  const submitGuess = useCallback(() => {
-    if (currentGuess.length !== WORD_LENGTH || !isValid(currentGuess)) return;
+  // Submit wrapper
+  const submitGuess = useCallback(async () => {
+    if (word.length !== WORD_LENGTH) return;
+    if (!isValidWord(word, WORD_LENGTH)) {
+      setIsValid(false);
+      return;
+    }
+    setIsValid(true);
     saveWord(true);
-  }, [currentGuess, isValid]);
+  }, [word, saveWord]);
 
-  // 4) key states
+  // Key states
   type KeyState = "correct" | "present" | "absent";
 
   const keyStates: Record<string, KeyState | undefined> = useMemo(() => {
@@ -128,9 +137,6 @@ export const DailyGame = () => {
     correctLetters.forEach((l) => { map[l.toUpperCase()] = "correct"; });
     return map;
   }, [absentLetters, presentLetters, correctLetters]);
-
-  // 5) flags
-  const canSubmit = currentGuess.length === WORD_LENGTH && isValid(currentGuess);
 
   return (
     <div className='bg-background h-full w-full min-h-screen text-text-page'>
@@ -159,7 +165,6 @@ export const DailyGame = () => {
           onChar={addCharToCurrentGuess}
           onDelete={removeLastCharFromCurrentGuess}
           submitGuess={submitGuess}
-          canSubmit={canSubmit}
           keyStates={keyStates}
           disabled={showResults}
         />

@@ -18,24 +18,30 @@ export const Statistics = ({
 }: StatisticsProps) => {
 
     return (
-        <div className="flex justify-evenly max-w-[720px] font-sans text-foreground">
-            <div className="flexcolumn centered">
-                <div className="font-bold">{totalGames}</div>
-                <div className="sub-text text-foreground/50">Played </div>
+        <div className="w-full max-w-[720px] flex justify-evenly font-sans text-foreground">
+            <div className="flex flex-col items-center top-0">
+                <div className="font-bold text-2xl">{totalGames}</div>
+                <div className="sub-text text-foreground/70">Played </div>
             </div>
-            <div className="flexcolumn centered">
-                <div className="font-bold">{winRate}</div>
-                <div className="sub-text text-foreground/50">Win %</div>
+            <div className="flex flex-col items-center top-0">
+                <div className="font-bold text-2xl">{winRate}</div>
+                <div className="sub-text text-foreground/70">Win %</div>
             </div>
             { hideStreak ? 
                 <>
-                    <div className="flexcolumn centered">
-                        <div className="font-bold">{streak}</div>
-                        <div className="sub-text text-foreground/50">Streak</div>
+                    <div className="flex flex-col items-center top-0">
+                        <div className="font-bold text-2xl">{streak}</div>
+                        <div className="flex flex-col text-center sub-text text-foreground/70">
+                            <div>Current</div> 
+                            <div>Streak</div>
+                        </div>
                     </div>
-                    <div className="flexcolumn centered">
-                        <div className="font-bold">{maxStreak}</div>
-                        <div className="sub-text text-foreground/50">Max Streak</div>
+                    <div className="flex flex-col items-center top-0">
+                        <div className="font-bold text-2xl">{maxStreak}</div>
+                        <div className="flex flex-col text-center sub-text text-foreground/70">
+                            <div>Max</div>
+                            <div>Streak</div>
+                        </div>
                     </div>
                 </> : <></>
             }
@@ -50,7 +56,6 @@ export const Distribution = ({ distribution }: { distribution: number[] }) => {
 
     return (
         <div className="grid gap-2">
-
             {distribution.map((count, index) => (
                 <div key={index} className="flex items-center gap-2">
                     <div className="text-foreground/70 w-6 text-right">
@@ -91,18 +96,26 @@ export const Bar = ({
 export const GameModeStatistics = ( game: GameModeProperties ) => {
     const totalGames = game.wins + game.losses;
     return(
-        <div className="flex flex-col w-full p-4 mt-4 mb-4">
-            <div className="text-2xl text-foreground font-bold py-2">{game.name}</div>
-            <div className="text-md text-foreground mt-2 mb-2">STATISTICS:</div>
-            <Statistics 
-                winRate={toPercentage(game.wins, totalGames)}
-                totalGames={totalGames} 
-                streak={game.streak}
-                maxStreak={game.maxStreak} 
-                hideStreak={game.name !== "Free Play"}
-            />
-            <div className="text-md text-foreground mt-2 mb-2">GUESS DISTRIBUTION:</div>
-            <Distribution distribution={game.distribution} />
-        </div >
+        <div className="flex flex-col items-center bg-background md:w-90%">
+            <div className="w-full max-w-6xl mt-12 rounded-2xl border border-border/60 bg-background/60 backdrop-blur p-6">
+
+                <div className="text-xl md:text-3xl text-foreground font-bold py-2">{game.name}</div>
+                    <div className="flex flex-col w-full items-center">
+                        <div className="text-sm md:text-lg font-black text-foreground m-5">STATISTICS</div>
+                        <Statistics 
+                            winRate={toPercentage(game.wins, totalGames)}
+                            totalGames={totalGames} 
+                            streak={game.streak}
+                            maxStreak={game.maxStreak} 
+                            hideStreak={game.name !== "Free Play"}
+                        />
+                    </div>
+                <div className="flex flex-col w-full items-center">
+                    <div className="text-sm md:text-lg font-black text-foreground m-5">GUESS DISTRIBUTION</div>
+                </div>
+                    <Distribution distribution={game.distribution} />
+
+            </div>
+        </div>
     );
 }

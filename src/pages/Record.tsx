@@ -10,7 +10,6 @@ export const Record = () => {
   return (
     <div className= "flex flex-col bg-background h-dvh">
       <div className="flex-1 min-h-0 overflow-y-auto pb-24">
-      <PageTitle title="Statistics" />
         {GameModeStatistics(dailyGame)}
         {GameModeStatistics(freeGame)}
       </div>
