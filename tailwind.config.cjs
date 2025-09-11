@@ -40,6 +40,10 @@ module.exports = {
                 key_bg_absent: "hsl(var(--key-bg-absent) / <alpha-value>)",
                 key_bg_present: "hsl(var(--key-bg-present) / <alpha-value>)",
                 key_bg_correct: "hsl(var(--key-bg-correct) / <alpha-value>)",
+
+                disabled_bg: "hsl(--disabled-bg / <alpha-value>)",
+                disabled_foreground: "hsl(--disabled-fg / <alpha-value>)",
+                disabled_border: "hsl(--disabled-border / <alpha-value>)",
             },
             scale: {
                 55: "0.55",

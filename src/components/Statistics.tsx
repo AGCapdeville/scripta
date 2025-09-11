@@ -1,5 +1,5 @@
 import { PlayerDataProperties, GameModeProperties } from "../types/Game";
-import { toPercentage } from "../utility/toPercentage";
+import { toPercentage } from "../utility/math";
 
 interface StatisticsProps {
     winRate: String;

@@ -45,10 +45,6 @@ export const Word = ({
 
     if (wordSet.has(word.toLowerCase()) && word.trim().length === 5) {
 
-      console.log(word);
-
-      console.log("s:" + secretWord);
-
       let absent = [...absentLetters];
       let present = [...presentLetters];
       let correct = [...correctLetters];

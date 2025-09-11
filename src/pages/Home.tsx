@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 import { motion } from "framer-motion";
 import { Play, HelpCircle, BarChart3, Settings, Sparkles } from "lucide-react";
 import { Footer } from "../components/Footer";
-import { loadPlayerData } from "../utility/UserData";
+import { loadPlayerData } from "../utility/user";
 
 export const Home = () => {
 
@@ -105,6 +105,7 @@ const CTAButton = ({ href, icon: Icon, children, variant = "primary" }: { href: 
       : variant === "outline"
         ? "border border-border text-foreground hover:bg-accent hover:text-accent-foreground"
         : "text-foreground/80 hover:text-foreground";
+
   return (
     <Link to={href} className={`${base} ${styles}`}>
       <Icon className="h-4 w-4" /> {children}
@@ -142,7 +143,7 @@ export const HomePage = () => {
           </p>
 
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-            <CTAButton href="/scripta/daily" icon={Play}>Play</CTAButton>
+            <CTAButton href="/scripta/modes" icon={Play}>Play</CTAButton>
             <CTAButton href="/scripta/how-to-play" icon={HelpCircle} variant="outline">How to Play</CTAButton>
             <CTAButton href="/scripta/statisics" icon={BarChart3} variant="ghost">Statistics</CTAButton>
             <CTAButton href="/scripta/settings" icon={Settings} variant="ghost">Settings</CTAButton>

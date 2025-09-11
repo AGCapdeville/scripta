@@ -1,41 +1,16 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import seedrandom from 'seedrandom';
 
 import { Word } from '../components/Word';
 import { Keys } from '../components/Keys';
-
-import wordJSON from '../assets/wordList.json';
-
 import { Results } from '../components/Results';
 
 import { useNavigate } from 'react-router-dom';
-import { isValidWord } from '../utility/Dictionary';
+import { isValidWord } from '../utility/pictionary';
+
+import wordJSON from '../assets/wordList.json';
 
 const WORD_LENGTH = 5;
 
-
-const getDailySeed = (ns = 'my-game'): string => {
-  const todayUTC = new Date().toISOString().slice(0, 10); // "YYYY-MM-DD"
-  return `${ns}:${todayUTC}`;
-}
-
-const getDailyRNG = (ns?: string) => {
-  return seedrandom(getDailySeed(ns));
-}
-
-const getDailyWord = (wordList: string[]): string => {
-
-  let key = getDailySeed();
-  let word = localStorage.getItem(key);
-
-  if (!word) {
-    const rng = getDailyRNG();
-    word = wordList[Math.floor(rng() * wordList.length)];
-    localStorage.setItem(getDailySeed(), word);
-  }
-
-  return word; 
-};
 
 export const DailyGame = () => {
 
@@ -183,3 +158,4 @@ export const DailyGame = () => {
     </div>
   )
 }
+

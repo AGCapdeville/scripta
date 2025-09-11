@@ -4,7 +4,7 @@ export const loadPlayerData = (): PlayerDataProperties => {
     let player: PlayerDataProperties = localStorage.getItem("playerData") ? JSON.parse(localStorage.getItem("playerData")!) :  null;
 
     if (!player) {
-        
+    
         const daily: GameModeProperties = {
             name: "Daily Word",
             wins: 0,
@@ -44,6 +44,29 @@ export const loadPlayerData = (): PlayerDataProperties => {
     }
 
     return player;
+}
+
+export const completeDaily = () => {
+    localStorage.setItem("dailyWordDayCompleted", new Date().toISOString());
+}
+
+export const checkDailyStatus = () : boolean => {
+    const stored = localStorage.getItem("dailyWordDayCompleted");
+
+    if (!stored) return false;
+    
+    // Turn the stored string back into a Date object
+    const storedDate = new Date(stored);
+
+    // Get today's date at midnight
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    // Reset daily word
+    if (storedDate < today) localStorage.removeItem("dailyWordDayCompleted");
+
+    // Compare days (ignore hours/minutes)
+    return storedDate < today;
 }
 
 export const saveGameScore = (gameType: string, outcome: boolean, guesses: number) => {

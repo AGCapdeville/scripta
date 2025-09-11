@@ -57,6 +57,10 @@
 
   --scale-size: 2.5rem;
   --scale-color: hsla(0, 0%, 10%);
+
+  --disabled-bg: hsla(220, 14%, 90%); /* light gray background */
+  --disabled-fg: hsla(220, 9%, 46%); /* muted text */
+  --disabled-border: hsla(220, 14%, 80%); /* subtle border */
 }
 
 /* Dark theme (fill with your real dark values; using same here as placeholder) */
@@ -100,6 +104,10 @@
 
   --scale-size: 2.5rem;
   --scale-color: hsla(0, 0%, 10%, 0.06);
+
+  --disabled-bg: hsla(0, 0%, 24%); /* dark neutral */
+  --disabled-fg: hsla(0, 0%, 70%); /* readable muted text */
+  --disabled-border: hsla(0, 0%, 44%); /* mid border */
 }
 
 /* Tell Tailwind to generate color utilities from your tokens */
@@ -137,6 +145,10 @@
   --color-key-bg-absent: var(--key-bg-absent);
   --color-key-bg-present: var(--key-bg-present);
   --color-key-bg-correct: var(--key-bg-correct);
+
+  --color-disabled-bg: var(--disabled-bg);
+  --color-disabled-foreground: var(--disabled-fg);
+  --color-disabled-border: var(--disabled-border);
 }
 
 body {

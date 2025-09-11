@@ -1,0 +1,25 @@
+import seedrandom from 'seedrandom';
+
+const getDailySeed = (ns = 'my-game'): string => {
+    const todayUTC = new Date().toISOString().slice(0, 10); // "YYYY-MM-DD"
+    return `${ns}:${todayUTC}`;
+}
+
+const getDailyRNG = (ns?: string) => {
+    return seedrandom(getDailySeed(ns));
+}
+
+const getDailyWord = (wordList: string[]): string => {
+
+    let key = getDailySeed();
+    let word = localStorage.getItem(key);
+
+    if (!word) {
+        const rng = getDailyRNG();
+        word = wordList[Math.floor(rng() * wordList.length)];
+        localStorage.setItem(getDailySeed(), word);
+    }
+
+    return word;
+};
+

@@ -1,6 +1,6 @@
 import { PageTitle } from "../components/PageComponents";
 import { GameModeStatistics } from "../components/Statistics";
-import { loadPlayerData } from "../utility/UserData";
+import { loadPlayerData } from "../utility/user";
 
 export const Record = () => {
   const player = loadPlayerData();
