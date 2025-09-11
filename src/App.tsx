@@ -9,7 +9,7 @@ import { Page } from './components/Framer';
 // Pages
 import { Home, HomePage} from './pages/Home';
 import { DailyGame } from './pages/DailyGame';
-import { FreeGame } from './pages/FreeGame';
+import { PracticeGame } from './pages/PracticeGame';
 import { About } from './pages/About';
 import { Record } from './pages/Record';
 import { Settings } from './pages/Settings';
@@ -29,7 +29,7 @@ export default function App() {
             <Route path="/scripta/about"  element={<Page><About /> </Page>} />
             <Route path="/scripta/settings" element={<Page><Settings /> </Page>} />
             <Route path="/scripta/daily"  element={<Page><DailyGame /> </Page>} />
-            <Route path="/scripta/free"   element={<Page><FreeGame /> </Page>} />
+            <Route path="/scripta/practice"   element={<Page><PracticeGame /> </Page>} />
             <Route path="/scripta/statisics" element={<Page><Record /> </Page>} />
             <Route path="/scripta/how-to-play" element={<Page><HowToPlay /></Page>} />
             <Route path="/scripta/modes" element={<Page><GameModes /></Page>} />

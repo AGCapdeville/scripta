@@ -6,11 +6,11 @@ import { Results } from '../components/Results';
 
 import { useNavigate } from 'react-router-dom';
 import { isValidWord } from '../utility/words';
-import { getDailyFiveLetterWord } from '../utility/fiveLetterWord';
+import { getFiveLetterWord } from '../utility/fiveLetterWord';
 
 const WORD_LENGTH = 5;
 
-export const DailyGame = () => {
+export const PracticeGame = () => {
 
   const [word, setWord] = useState("     ");
   const [save, saveWord] = useState(false);
@@ -20,7 +20,7 @@ export const DailyGame = () => {
   const [showResults, setShowResults] = useState(false);
   const [outcome, setOutcome] = useState(false);
   const [revealModal, setRevealModal] = useState(false);
-  
+
   const [absentLetters, setAbsentLetters] = useState<string[]>([]);
   const [presentLetters, setPresentLetters] = useState<string[]>([]);
   const [correctLetters, setCorrectLetters] = useState<string[]>([]);
@@ -41,7 +41,7 @@ export const DailyGame = () => {
 
 
   const fetchSecretWord = async () => {
-    const word = getDailyFiveLetterWord();
+    const word = getFiveLetterWord();
     try {
       setSecretWord(word.toUpperCase());
     } catch (error) {
@@ -56,7 +56,7 @@ export const DailyGame = () => {
 
     const won = word === secretWord;
     const ended = won || attempts >= 5;
-    
+
     if (ended) {
       setOutcome(won);
       setShowResults(true)
@@ -102,16 +102,16 @@ export const DailyGame = () => {
 
   return (
     <div className='bg-background h-full w-full min-h-screen text-text-page'>
-      
+
       {loading ? "loading..." :
         <div className='pt-4'>
-          <Word word={word} 
-            setWord={setWord} 
-            secretWord={secretWord} 
-            save={save} 
+          <Word word={word}
+            setWord={setWord}
+            secretWord={secretWord}
+            save={save}
             saveWord={saveWord}
             attempts={attempts}
-            setAttempts={setAttempts} 
+            setAttempts={setAttempts}
             absentLetters={absentLetters}
             setAbsentLetters={setAbsentLetters}
             presentLetters={presentLetters}
@@ -134,7 +134,7 @@ export const DailyGame = () => {
 
       {revealModal && (
         <Results
-          game="Daily"
+          game="Practice"
           outcome={outcome}
           guesses={attempts}
           secretWord={secretWord}

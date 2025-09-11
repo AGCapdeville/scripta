@@ -4,7 +4,7 @@ import { BrowserRouter } from 'react-router-dom';
 import './Global.css'
 import App from './App'
 
-import { loadPlayerData } from './utility/user';
+import { loadPlayerData } from './utility/userData';
 
 let root = document.getElementById('root');
 

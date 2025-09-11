@@ -2,7 +2,7 @@ import { Footer } from "../components/Footer";
 import { PageTitle } from "../components/PageComponents";
 import { Calendar, Infinity, Hourglass } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { checkDailyStatus } from "../utility/user";
+import { checkDailyStatus } from "../utility/userData";
 import { useEffect, useState } from "react";
 import { getCountdown } from "../utility/time"
 
@@ -83,7 +83,7 @@ export const GameModes = () => {
         />
         <ModeCard
           icon={Infinity}
-          title="Free Play"
+          title="Practice"
           subtitle="Unlimited puzzles. Practice anytime."
           daily={false}
           onClick={() => navigate("/scripta/practice")}

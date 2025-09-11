@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 import { motion } from "framer-motion";
 import { Play, HelpCircle, BarChart3, Settings, Sparkles } from "lucide-react";
 import { Footer } from "../components/Footer";
-import { loadPlayerData } from "../utility/user";
+import { loadPlayerData } from "../utility/userData";
 
 export const Home = () => {
 

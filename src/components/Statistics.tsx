@@ -107,7 +107,7 @@ export const GameModeStatistics = ( game: GameModeProperties ) => {
                             totalGames={totalGames} 
                             streak={game.streak}
                             maxStreak={game.maxStreak} 
-                            hideStreak={game.name !== "Free Play"}
+                            hideStreak={game.name !== "Practice"}
                         />
                     </div>
                 <div className="flex flex-col w-full items-center">

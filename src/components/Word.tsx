@@ -42,8 +42,8 @@ export const Word = ({
     if (!save) return;
     saveWord(false);
 
-    if (isValidWord(word, 5)) {
-
+    if (isValidWord(word, 5)) { // TODO: come back to this logic... Do we need to do this check here?
+      console.log("yes?");
       let absent = [...absentLetters];
       let present = [...presentLetters];
       let correct = [...correctLetters];
@@ -96,9 +96,8 @@ export const Word = ({
           {submittedWords.map((submittedWord, rowIndex) => (
             <div key={rowIndex} className={LetterContainer}>
               {[...submittedWord].map((ch, i) => (
-                <div className="bg-background">
+                <div key={`${rowIndex}-${i}`} className="bg-background">
                   <FlipLetter
-                    key={`${rowIndex}-${i}`}
                     letter={ch}
                     index={i}
                     answer={secretWord}

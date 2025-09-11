@@ -1,17 +1,17 @@
 import { PageTitle } from "../components/PageComponents";
 import { GameModeStatistics } from "../components/Statistics";
-import { loadPlayerData } from "../utility/user";
+import { loadPlayerData } from "../utility/userData";
 
 export const Record = () => {
   const player = loadPlayerData();
   const dailyGame = player.dailyGame;
-  const freeGame = player.freeGame;
+  const practiceGame = player.practiceGame;
 
   return (
     <div className= "flex flex-col bg-background h-dvh">
       <div className="flex-1 min-h-0 overflow-y-auto pb-24">
         {GameModeStatistics(dailyGame)}
-        {GameModeStatistics(freeGame)}
+        {GameModeStatistics(practiceGame)}
       </div>
     </div>
   );

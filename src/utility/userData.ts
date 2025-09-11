@@ -14,17 +14,8 @@ export const loadPlayerData = (): PlayerDataProperties => {
             maxStreak: 0,
         }
 
-        const free: GameModeProperties = {
-            name: "Free Play",
-            wins: 0,
-            losses: 0,
-            distribution: Array(6).fill(0),
-            streak: 0,
-            maxStreak: 0,
-        }
-
-        const wave: GameModeProperties = {
-            name: "Time Attack",
+        const practice: GameModeProperties = {
+            name: "Practice",
             wins: 0,
             losses: 0,
             distribution: Array(6).fill(0),
@@ -35,8 +26,7 @@ export const loadPlayerData = (): PlayerDataProperties => {
         const newPlayer: PlayerDataProperties = {
             username: "",
             dailyGame: daily,
-            freeGame: free,
-            waveGame: wave,
+            practiceGame: practice,
         };
 
         localStorage.setItem("playerData", JSON.stringify(newPlayer));
@@ -50,11 +40,11 @@ export const completeDaily = () => {
     localStorage.setItem("dailyWordDayCompleted", new Date().toISOString());
 }
 
-export const checkDailyStatus = () : boolean => {
+export const checkDailyStatus = (): boolean => {
     const stored = localStorage.getItem("dailyWordDayCompleted");
 
     if (!stored) return false;
-    
+
     // Turn the stored string back into a Date object
     const storedDate = new Date(stored);
 
@@ -62,11 +52,18 @@ export const checkDailyStatus = () : boolean => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    // Reset daily word
-    if (storedDate < today) localStorage.removeItem("dailyWordDayCompleted");
+    // Get the stored date at midnight
+    const storedMidnight = new Date(storedDate);
+    storedMidnight.setHours(0, 0, 0, 0);
 
-    // Compare days (ignore hours/minutes)
-    return storedDate < today;
+    // If the stored date is before today, reset and return false
+    if (storedMidnight.getTime() < today.getTime()) {
+        localStorage.removeItem("dailyWordDayCompleted");
+        return false;
+    } else {
+        return true;
+    }
+
 }
 
 export const saveGameScore = (gameType: string, outcome: boolean, guesses: number) => {
@@ -74,14 +71,11 @@ export const saveGameScore = (gameType: string, outcome: boolean, guesses: numbe
     let game: GameModeProperties;
 
     switch (gameType) {
-        case "Daily Game":
+        case "Daily":
             game = player.dailyGame;
             break;
-        case "Free Game":
-            game = player.freeGame;
-            break;
-        case "Time Attack":
-            game = player.waveGame;
+        case "Practice":
+            game = player.practiceGame;
             break;
         default:
             console.error("Invalid game type");
