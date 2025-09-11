@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { FlipLetter } from "./Letter";
-import dictJSON from "../assets/words.json";
+import { isValidWord } from "../utility/words";
 
 const LetterContainer = "flex justify-center w-full gap-[5px] py-[2px]";
 
@@ -36,14 +36,13 @@ export const Word = ({
   setCorrectLetters,
 }: WordProps) => {
   const [submittedWords, setSubmittedWords] = useState<string[]>([]);
-  const [wordSet, setWordSet] = useState<Set<string>>(new Set());
   const [shake, setShake] = useState(false);
 
   useEffect(() => {
     if (!save) return;
     saveWord(false);
 
-    if (wordSet.has(word.toLowerCase()) && word.trim().length === 5) {
+    if (isValidWord(word, 5)) {
 
       let absent = [...absentLetters];
       let present = [...presentLetters];
@@ -69,10 +68,6 @@ export const Word = ({
 
   }, [save]);
 
-  useEffect(() => {
-    const words = (dictJSON as string[]).filter((w: string) => w.length === 5);
-    setWordSet(new Set(words));
-  }, []);
 
   return (
     <>

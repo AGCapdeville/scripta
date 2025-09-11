@@ -1,4 +1,4 @@
-import dictionaryJSON from '../assets/words.json';
+import dictionaryJSON from '../assets/dictionary.json';
 
 export const isValidWord = (word: string, maxWordLength: number): boolean => {
     const dictionary = dictionaryJSON as string[];
