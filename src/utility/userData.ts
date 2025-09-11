@@ -36,9 +36,72 @@ export const loadPlayerData = (): PlayerDataProperties => {
     return player;
 }
 
-export const completeDaily = () => {
+export const completeDaily = (outcome: boolean) => {
+    // Always mark that today's daily was played
     localStorage.setItem("dailyWordDayCompleted", new Date().toISOString());
+
+    const streakStr = localStorage.getItem("dailyStreak");
+    const lastPlayed = localStorage.getItem("dailyWordDayCompleted");
+
+    let streak = streakStr ? parseInt(streakStr, 10) : 0;
+
+    if (!outcome) {
+        // ❌ Loss resets streak to 0
+        localStorage.setItem("dailyStreak", "0");
+        return;
+    }
+
+    // ✅ Win case: determine if consecutive day
+    let shouldIncrement = true;
+
+    if (lastPlayed) {
+        const lastDate = new Date(lastPlayed);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        const yesterday = new Date(today);
+        yesterday.setDate(today.getDate() - 1);
+
+        // If last played date is NOT yesterday, reset streak to 1
+        if (lastDate < yesterday) {
+            streak = 0;
+            shouldIncrement = false;
+        }
+    }
+
+    localStorage.setItem("dailyStreak", String(shouldIncrement ? streak + 1 : 1));
+};
+
+export const checkDailyStreak = () => {
+    const lastPlayed = localStorage.getItem("dailyWordDayCompleted");
+
+    const streakStr = localStorage.getItem("dailyStreak");
+    let streak = streakStr ? parseInt(streakStr, 10) : 0;
+
+    // Did player return to play daily in time?
+    if (lastPlayed) {
+        const lastDate = new Date(lastPlayed);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        const yesterday = new Date(today);
+        yesterday.setDate(today.getDate() - 1);
+
+        // No ❌ Reset streak to 0
+        if (lastDate < yesterday) {
+            streak = 0;
+        }
+    } else {
+        // No daily games played
+        return 0; 
+    }
+
+
+    localStorage.setItem("dailyStreak", String(streak));
+
+    return localStorage.getItem("dailyStreak");
 }
+  
 
 export const checkDailyStatus = (): boolean => {
     const stored = localStorage.getItem("dailyWordDayCompleted");

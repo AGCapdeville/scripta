@@ -170,16 +170,7 @@ export const HamburgerMenu = () => {
                         clickFunction={() => setOpen(false)}
                     >
                         Home
-                    </LinkButton>
-                    <LinkButton
-                        to="/scripta/daily"
-                        // className="pl-4 hover:text-violet-400 hover:bg-black"
-                        className="pl-4 px-3 py-2 text-sm text-foreground/70 hover:text-foreground hover:bg-black text-foreground transition"
-                        clickFunction={() => setOpen(false)}
-                    >
-                        Daily
-                    </LinkButton>
-
+                    </LinkButton> 
                     <LinkButton
                         to="/scripta/modes"
                         children="Game Modes"

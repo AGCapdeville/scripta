@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 import { motion } from "framer-motion";
 import { Play, HelpCircle, BarChart3, Settings, Sparkles } from "lucide-react";
 import { Footer } from "../components/Footer";
-import { loadPlayerData } from "../utility/userData";
+import { checkDailyStreak, loadPlayerData } from "../utility/userData";
 
 export const Home = () => {
 
@@ -121,6 +121,8 @@ export const HomePage = () => {
   const totalGames = wins + losses;
   const winRate = totalGames > 0 ? Math.round((wins / totalGames) * 100) : 0;
 
+  const streak = checkDailyStreak();
+
   useEffect(() => {
     LoadTheme();
   }, []);
@@ -150,7 +152,11 @@ export const HomePage = () => {
           </div>
 
           <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
-            <Pill>🔥 <span className="font-medium">3‑day streak</span></Pill>
+            {streak ? 
+              <Pill>🔥 <span className="font-medium">{parseInt(streak, 10)}‑day streak</span></Pill> 
+              : 
+              <Pill>🔥 <span className="font-medium">0‑day streak</span></Pill>
+            }
             <Pill>⭐ <span className="font-medium">Win rate {winRate}%</span></Pill>
           </div>
         </div>
