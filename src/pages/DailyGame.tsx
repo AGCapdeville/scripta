@@ -5,7 +5,7 @@ import { Keys } from '../components/Keys';
 import { Results } from '../components/Results';
 
 import { useNavigate } from 'react-router-dom';
-import { isValidWord } from '../utility/pictionary';
+import { isValidWord } from '../utility/Dictionary';
 
 import wordJSON from '../assets/wordList.json';
 
