@@ -43,7 +43,6 @@ export const Word = ({
     saveWord(false);
 
     if (isValidWord(word, 5)) { // TODO: come back to this logic... Do we need to do this check here?
-      console.log("yes?");
       let absent = [...absentLetters];
       let present = [...presentLetters];
       let correct = [...correctLetters];
