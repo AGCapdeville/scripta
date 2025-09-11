@@ -1,15 +1,15 @@
 import seedrandom from 'seedrandom';
 
-const getDailySeed = (ns = 'my-game'): string => {
+export const getDailySeed = (ns = 'my-game'): string => {
     const todayUTC = new Date().toISOString().slice(0, 10); // "YYYY-MM-DD"
     return `${ns}:${todayUTC}`;
 }
 
-const getDailyRNG = (ns?: string) => {
+export const getDailyRNG = (ns?: string) => {
     return seedrandom(getDailySeed(ns));
 }
 
-const getDailyWord = (wordList: string[]): string => {
+export const getDailyWord = (wordList: string[]): string => {
 
     let key = getDailySeed();
     let word = localStorage.getItem(key);

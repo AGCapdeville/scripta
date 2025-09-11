@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { FlipLetter } from "./Letter";
-import dictJSON from "../assets/dictionary.json";
+import dictJSON from "../assets/words.json";
 
 const LetterContainer = "flex justify-center w-full gap-[5px] py-[2px]";
 
