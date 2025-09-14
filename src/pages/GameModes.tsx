@@ -2,7 +2,7 @@ import { Footer } from "../components/Footer";
 import { PageTitle } from "../components/PageComponents";
 import { Calendar, Infinity, Hourglass } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { checkDailyStatus } from "../utility/userData";
+import { checkDailyStatus } from "../utility/UserData";
 import { useEffect, useState } from "react";
 import { getCountdown } from "../utility/time"
 

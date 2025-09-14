@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 import { motion } from "framer-motion";
 import { Play, HelpCircle, BarChart3, Settings, Sparkles } from "lucide-react";
 import { Footer } from "../components/Footer";
-import { checkDailyStreak, loadPlayerData } from "../utility/userData";
+import { checkDailyStreak, loadPlayerData } from "../utility/UserData";
 
 export const Home = () => {
 
@@ -139,7 +139,7 @@ export const HomePage = () => {
           <div className="mt-6">
             <Title text="Scripta" />
           </div>
-
+          
           <p className="mt-4 max-w-xl text-balance text-base md:text-lg text-foreground/70">
             A minimalist word puzzle — clean, calm, and just challenging enough.
           </p>

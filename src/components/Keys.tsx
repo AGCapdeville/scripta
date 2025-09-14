@@ -31,7 +31,6 @@ export const Keys = ({
   keyStates = {},
   disabled = false,
 }: KeysProps) => {
-  // Prevent double submits (rapid Enter taps, on-screen + hardware overlap, etc.)
 
   const handleKey = useCallback(
     (raw: string) => {
@@ -84,14 +83,19 @@ export const Keys = ({
     (label: string) => {
       // basic Tailwind-ish classes — adjust to your design system
       const base =
-        "rounded-md px-2 sm:px-3 md:px-4 " +        // horizontal padding scales
-        "h-10 sm:h-12 md:h-14 " +                    // key height scales
-        "text-[12px] sm:text-xs md:text-sm font-bold uppercase " + // text size scales
-        "flex items-center justify-center " +
-        "transition-colors duration-150 active:scale-95 disabled:opacity-50 disabled:pointer-events-none ";
+        // "w-full rounded-md px-2 sm:px-3 md:px-4 " +        // horizontal padding scales
+        "rounded-md " +        // horizontal padding scales
+        // "h-10 sm:h-12 md:h-14 " +                    // key height scales
+        "h-15 sm:h-16 " +                    // key height scales
+        "transition-colors duration-150 active:scale-90 disabled:opacity-50 disabled:pointer-events-none " +
+        "font-black uppercase " +
+        (label === "ENTER" ?
+          "text-[12px] sm:text-[16px] md:text-[18px]" :
+          "text-[18px] sm:text-[20px] md:text-[22px]"
+        );
         
 
-      const wide = label === "ENTER" || label === "DEL" ? " basis-1 p-1 m-1" : "";
+      // const wide = label === "ENTER" || label === "DEL" ? " basis-1 p-1 m-1" : "";
       const state = keyStates[label] as KeyState;
 
       let color = "bg-key-bg-default text-key-text"; // default key
@@ -99,7 +103,8 @@ export const Keys = ({
       else if (state === "present") color = "bg-key-bg-present text-key-text-invert";
       else if (state === "absent") color = "bg-key-bg-absent text-key-text-invert";
 
-      return `${base} ${color}${wide}`;
+      // return `${base} ${color} ${wide}`;
+      return `${base} ${color}`;
     },
     [keyStates]
   );
@@ -114,18 +119,20 @@ export const Keys = ({
         const gridCols =
           rIdx === 0 ? "grid-cols-10" :
           rIdx === 1 ? "grid-cols-9" :
-            "grid-cols-11"; // last row has 9 letters + ENTER + DEL
+                       "grid-cols-11"; // last row has 9 letters + ENTER + DEL
 
         return (
           <div
             key={`row-${rIdx}`}
-            className={`grid ${gridCols} gap-2 py-1 w-full`}
+            className={`grid ${gridCols} gap-1 min-[400px]:gap-2 py-1`}
             role="row"
           >
           {row.map((label) => {
             const isAction = label === "ENTER" || label === "DEL";
-            const span = isAction && rIdx === 2 ? "col-span-2" : "col-span-1";            
-          
+            const span = isAction && rIdx === 2 ? "col-span-2" : "col-span-1";    
+            const deleteStyle = (label === "DEL" ? "scale-125 scale-y-120 font-semibold" : "");
+            const enterStyle = (label === "ENTER" ? "scale-110 scale-y-125 min-[400px]:scale-120" : "")
+
             return (  
               <button
                 key={label}
@@ -146,7 +153,9 @@ export const Keys = ({
                   }
                 }}
               >
-                {label === "DEL" ? "⌫" : label}
+                <div className={`${enterStyle} ${deleteStyle}`}>
+                 {label === "DEL" ? "⌫" : label}
+                </div>
               </button>
             )
           })}

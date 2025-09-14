@@ -1,6 +1,6 @@
 // components/Results.tsx
 import { createPortal } from "react-dom";
-import { completeDaily, saveGameScore } from "../utility/userData";
+import { completeDaily, saveGameScore } from "../utility/UserData";
 
 type ResultsProps = {
   game: string;
@@ -15,7 +15,7 @@ export const Results = ({ game, outcome, guesses, secretWord, onClose }: Results
   saveGameScore(game, outcome, guesses);
 
   if (game === "Daily") {
-    completeDaily();
+    completeDaily(outcome);
   }
 
   const modalRoot = document.getElementById("modal-root")!;
