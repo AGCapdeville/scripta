@@ -50,8 +50,7 @@ module.exports = {
                 65: "0.65",
             },
             screens: {
-                'xs': '375px',   // iPhone SE / small Androids
-                'xxs': '320px',  // very tiny devices
+                xs: '400px',   // iPhone SE / small Androids
             },
             keyframes: {
                 shake: {

@@ -131,7 +131,7 @@ export const Keys = ({
             const isAction = label === "ENTER" || label === "DEL";
             const span = isAction && rIdx === 2 ? "col-span-2" : "col-span-1";    
             const deleteStyle = (label === "DEL" ? "scale-125 scale-y-120 font-semibold" : "");
-            const enterStyle = (label === "ENTER" ? "scale-110 scale-y-125 min-[400px]:scale-120" : "")
+            const enterStyle = (label === "ENTER" ? "scale-110 scale-y-125 min-[400px]:scale-120" : "") // TODO: Q: Alberto 400px -> xs
 
             return (  
               <button
