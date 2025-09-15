@@ -82,7 +82,6 @@ export const TimedGame = () => {
 
       setLoading(true);
       start(remaining + 60);
-      setTotalTime(totalTime + 60);
       setCompletedWords(completedWords + 1);
 
       // Reset
@@ -105,6 +104,9 @@ export const TimedGame = () => {
 
   useEffect(() => {
     if (showResults) return;
+
+
+    setTotalTime(totalTime + 1);
 
     if (remaining === 0 && startedGame) {
       setShowResults(true);
