@@ -1,9 +1,9 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { ThreeLineMenu, HamburgerMenu, LinkButton } from "./MenuButtons";
 import { FlipLetter } from './Letter';
 import { useEffect, useState } from 'react';
 import { Sparkles } from 'lucide-react';
-
+import { useTimer } from "./Timer";
 
 // min and max inclusive
 const randomInt = (min: number, max: number) => {
@@ -45,6 +45,10 @@ function useLoopTitle(
 
 
 export const Navbar = () => {
+  const { remaining, running } = useTimer();
+  const { pathname } = useLocation();
+  const inTimed = pathname.includes("/time-attack");
+  
   let title = "SCRIPTA";
   const [charSeed, setCharSeed] = useState<string>(() => randomWord(title));
   useLoopTitle(title, setCharSeed, 19000);
@@ -60,6 +64,12 @@ export const Navbar = () => {
           </div>
           <span className="font-semibold tracking-tight">Scripta</span>
         </LinkButton>
+
+        {inTimed && (
+          <div aria-live="polite" className={`font-mono ${remaining <= 10 ? "text-red-500" : ""}`}>
+            {Math.floor(remaining / 60)}:{String(remaining % 60).padStart(2, "0")}
+          </div>
+        )}
 
         <nav className="hidden gap-1 sm:flex">
           <LinkButton 

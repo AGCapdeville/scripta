@@ -73,7 +73,7 @@ export const GameModes = () => {
     <div className="min-h-screen flex flex-col items-center bg-background text-text-page">
       <PageTitle title="Game Modes" />
 
-      <div className="mt-8 grid gap-6 sm:grid-cols-2 w-full max-w-4xl px-4">
+      <div className="mt-8 grid gap-6 sm:grid-cols-2 items-center justify-center w-full max-w-4xl px-4">
         <ModeCard
           icon={Calendar}
           title="Daily"
@@ -88,6 +88,14 @@ export const GameModes = () => {
           daily={false}
           onClick={() => navigate("/scripta/practice")}
         />
+        <ModeCard
+          icon={Hourglass}
+          title="Time Attack"
+          subtitle="Solve to survive — times ticking!"
+          daily={false}
+          onClick={() => navigate("/scripta/time-attack")}
+        />
+        
       </div>
 
       <div className="mt-auto w-full">

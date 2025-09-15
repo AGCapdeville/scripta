@@ -37,7 +37,7 @@ export const Settings = () => {
           >
             <Sun className="w-6 h-6 p-1"/>Light
           </button>
-          <button 
+          <button
             id="dark-theme"
             className={ThemeButton({selected: chosenTheme === "dark" })}
             onClick={() => ThemeEvent("dark", setChosenTheme)}

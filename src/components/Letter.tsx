@@ -67,7 +67,7 @@ export const FlipLetter = ({ letter, index, answer, placeholder, delayMs = 0 }: 
 
     return (
         // <div className={`${pop ? `animate-pop` : ``}`}>
-            <div className={"w-[64px] h-[64px] [perspective:900px] font-black"} >
+            <div className={"w-[58px] h-[58px] [perspective:900px] font-black"} >
                 <div 
                     className={`relative w-full h-full rounded-lg transition-transform duration-1000 ease-in-out [transform-style:preserve-3d] ${flipped ? `[transform:rotateX(180deg)]` : ``} `}
                 >
@@ -77,8 +77,12 @@ export const FlipLetter = ({ letter, index, answer, placeholder, delayMs = 0 }: 
                         {letter}
                     </div>
                     <div id="back-card"
-                    className={`absolute inset-0 grid place-items-center rounded-lg border-2 [transform:rotateX(180deg)] [backface-visibility:hidden] bg-${letterColor} border-${letterBorder} text-${letterTextColor}`} //${letterTextColor}
-                        >
+                        className={`
+                            absolute inset-0 grid place-items-center rounded-lg border-2
+                            [transform:rotateX(180deg)] [backface-visibility:hidden] 
+                            bg-${letterColor} border-${letterBorder} text-${letterTextColor}`
+                        }
+                    >
                         {letter}
                     </div>
                 </div>

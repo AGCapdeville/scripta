@@ -4,3 +4,5 @@ export const toPercentage = (value: number, total: number): string => {
     const percentage = (value / total) * 100;
     return `${Math.round(percentage)}%`;
 }
+
+export const mean = (xs: number[]) => (xs.length ? xs.reduce((a, b) => a + b, 0) / xs.length : 0);

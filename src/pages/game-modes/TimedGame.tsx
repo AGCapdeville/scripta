@@ -1,38 +1,48 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Word } from '../components/Word';
-import { Keys } from '../components/Keys';
-import { Results } from '../components/Results';
+import { Word } from '../../components/Word';
+import { Keys } from '../../components/Keys';
+import { Results } from '../../components/Results';
 
 import { useNavigate } from 'react-router-dom';
-import { isValidWord } from '../utility/words';
-import { getDailyFiveLetterWord } from '../utility/fiveLetterWord';
-import { useTimer } from '../components/Timer';
+import { isValidWord } from '../../utility/words';
+import { getFiveLetterWord } from '../../utility/fiveLetterWord';
+
+import { useTimer } from "../../components/Timer";
+import { time } from 'framer-motion';
 
 const WORD_LENGTH = 5;
 
-export const DailyGame = () => {
+export const TimedGame = () => {
 
   const [word, setWord] = useState("     ");
-  const [save, saveWord] = useState(false);
   const [secretWord, setSecretWord] = useState("");
+  const [save, saveWord] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [attempts, setAttempts] = useState(0);
   const [showResults, setShowResults] = useState(false);
-  const [outcome, setOutcome] = useState(false);
   const [revealModal, setRevealModal] = useState(false);
   
+  const [attempts, setAttempts] = useState(0);
   const [absentLetters, setAbsentLetters] = useState<string[]>([]);
   const [presentLetters, setPresentLetters] = useState<string[]>([]);
   const [correctLetters, setCorrectLetters] = useState<string[]>([]);
-  const navigate = useNavigate();
-
-  const { start, reset, remaining, running, pause } = useTimer();
-  const [totalTime, setTotalTime] = useState(0);
   
+  const [startedGame, setStartedGame] = useState<boolean>(false);
+  const [completedWords, setCompletedWords] = useState(0);
+  const [clearSubmittedWords, resetSubmittedWords] = useState(false);
+  const navigate = useNavigate();
+  
+  const [totalTime, setTotalTime] = useState(0);
+  const [times, setTimes] = useState<number[]>([]);
+  const { start, reset, remaining, pause } = useTimer();
+
+  let timeStart = 60;
+  let prevTime = 60;
   
   useEffect(() => {
-    start(86400); // (24HR) shouldn't take players longer than this...
+    start(timeStart);            // e.g., 60-second round
+    setTotalTime(timeStart);
+    setStartedGame(true);
     return () => reset(); // cleanup on unmount
   }, [start, reset]);
 
@@ -51,7 +61,8 @@ export const DailyGame = () => {
 
 
   const fetchSecretWord = async () => {
-    const word = getDailyFiveLetterWord();
+    const word = getFiveLetterWord();
+    console.log(word);
     try {
       setSecretWord(word.toUpperCase());
     } catch (error) {
@@ -64,18 +75,43 @@ export const DailyGame = () => {
   useEffect(() => {
     if (!save || showResults) return;
 
-    const won = word === secretWord;
-    const ended = won || attempts >= 5;
-    
+    if (word === secretWord) {
+      let avg = prevTime - remaining;
+      setTimes([...times, avg]) // how long it took to complete word
+      prevTime = remaining;
+
+      setLoading(true);
+      start(remaining + 60);
+      setTotalTime(totalTime + 60);
+      setCompletedWords(completedWords + 1);
+
+      // Reset
+      setAttempts(0);
+      resetSubmittedWords(true);
+      setAbsentLetters([]);
+      setPresentLetters([]);
+      setCorrectLetters([]);
+      fetchSecretWord();
+    }
+
+    const ended = attempts >= 5;
+
     if (ended) {
-      pause();              // ✅ stop ticking 
-      const final = 86400 - remaining;
-      setTotalTime(final);   // ✅ store in state
-      setOutcome(won);
+      pause();
       setShowResults(true)
       setTimeout(() => setRevealModal(true), 1500);
     }
   }, [save])
+
+  useEffect(() => {
+    if (showResults) return;
+
+    if (remaining === 0 && startedGame) {
+      setShowResults(true);
+      setTimeout(() => setRevealModal(true), 500);
+    }
+  }, [remaining])
+
 
   // Key handlers
   const addCharToCurrentGuess = (ch: string) => {
@@ -114,22 +150,24 @@ export const DailyGame = () => {
 
   return (
     <div className='bg-background h-full w-full min-h-screen text-text-page'>
-      
+
       {loading ? "loading..." :
         <div className='pt-4'>
-          <Word word={word} 
-            setWord={setWord} 
-            secretWord={secretWord} 
-            save={save} 
+          <Word word={word}
+            setWord={setWord}
+            secretWord={secretWord}
+            save={save}
             saveWord={saveWord}
             attempts={attempts}
-            setAttempts={setAttempts} 
+            setAttempts={setAttempts}
             absentLetters={absentLetters}
             setAbsentLetters={setAbsentLetters}
             presentLetters={presentLetters}
             setPresentLetters={setPresentLetters}
             correctLetters={correctLetters}
             setCorrectLetters={setCorrectLetters}
+            clearSubmittedWords={clearSubmittedWords}
+            resetSubmittedWords={resetSubmittedWords}
           />
         </div>
       }
@@ -146,11 +184,11 @@ export const DailyGame = () => {
 
       {revealModal && (
         <Results
-          game="Daily"
-          outcome={outcome}
-          guesses={attempts}
+          game="Timed"
+          outcome={false}
+          guesses={completedWords}
           secretWord={secretWord}
-          averageTime={[totalTime]}
+          averageTime={times}
           totalTime={totalTime}
           onClose={closeHandler}
         />

@@ -86,7 +86,7 @@ export const Keys = ({
         // "w-full rounded-md px-2 sm:px-3 md:px-4 " +        // horizontal padding scales
         "rounded-md " +        // horizontal padding scales
         // "h-10 sm:h-12 md:h-14 " +                    // key height scales
-        "h-15 sm:h-16 " +                    // key height scales
+        "h-14 sm:h-16 " +                    // key height scales
         "transition-colors duration-150 active:scale-90 disabled:opacity-50 disabled:pointer-events-none " +
         "font-black uppercase " +
         (label === "ENTER" ?
@@ -124,7 +124,7 @@ export const Keys = ({
         return (
           <div
             key={`row-${rIdx}`}
-            className={`grid ${gridCols} gap-1 min-[400px]:gap-2 py-1`}
+            className={`grid ${gridCols} gap-1.5 min-[400px]:gap-2 py-1`}
             role="row"
           >
           {row.map((label) => {

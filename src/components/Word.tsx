@@ -18,6 +18,8 @@ type WordProps = {
   setPresentLetters: React.Dispatch<React.SetStateAction<Array<string>>>;
   correctLetters: Array<string>;
   setCorrectLetters: React.Dispatch<React.SetStateAction<Array<string>>>;
+  clearSubmittedWords?: boolean;
+  resetSubmittedWords?: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export const Word = ({
@@ -34,6 +36,8 @@ export const Word = ({
   setPresentLetters,
   correctLetters,
   setCorrectLetters,
+  clearSubmittedWords,
+  resetSubmittedWords
 }: WordProps) => {
   const [submittedWords, setSubmittedWords] = useState<string[]>([]);
   const [shake, setShake] = useState(false);
@@ -67,6 +71,12 @@ export const Word = ({
 
   }, [save]);
 
+  useEffect(() => {
+    if (!clearSubmittedWords) return;
+    resetSubmittedWords && resetSubmittedWords(false);
+    setSubmittedWords([]);
+    setWord("     ");
+  }, [clearSubmittedWords]);
 
   return (
     <>

@@ -1,4 +1,5 @@
-import { GameModeProperties, PlayerDataProperties } from "../types/Game";
+import { time } from "framer-motion";
+import { GameModeProperties, PlayerDataProperties, TimedGameProperties } from "../types/Game";
 
 export const loadPlayerData = (): PlayerDataProperties => {
     let player: PlayerDataProperties = localStorage.getItem("playerData") ? JSON.parse(localStorage.getItem("playerData")!) :  null;
@@ -6,12 +7,14 @@ export const loadPlayerData = (): PlayerDataProperties => {
     if (!player) {
     
         const daily: GameModeProperties = {
-            name: "Daily Word",
+            name: "Daily",
             wins: 0,
             losses: 0,
             distribution: Array(6).fill(0),
             streak: 0,
             maxStreak: 0,
+            averageSolveTime: [],
+            bestTime: 0
         }
 
         const practice: GameModeProperties = {
@@ -21,12 +24,23 @@ export const loadPlayerData = (): PlayerDataProperties => {
             distribution: Array(6).fill(0),
             streak: 0,
             maxStreak: 0,
+            averageSolveTime: [],
+            bestTime: 0
+        }
+
+        const timedAttack: TimedGameProperties = {
+            name: "Time Attack",
+            gamesPlayed: 0,
+            averageSolveTime: [],
+            timeSurvived: 0,
+            maxStreak: 0,
         }
 
         const newPlayer: PlayerDataProperties = {
             username: "",
             dailyGame: daily,
             practiceGame: practice,
+            timedGame: timedAttack
         };
 
         localStorage.setItem("playerData", JSON.stringify(newPlayer));
@@ -101,7 +115,6 @@ export const checkDailyStreak = () => {
 
     return localStorage.getItem("dailyStreak");
 }
-  
 
 export const checkDailyStatus = (): boolean => {
     const stored = localStorage.getItem("dailyWordDayCompleted");
@@ -129,31 +142,33 @@ export const checkDailyStatus = (): boolean => {
 
 }
 
-export const saveGameScore = (gameType: string, outcome: boolean, guesses: number) => {
+export const saveGameScore = (
+    gameType: string, outcome: boolean, guesses: number,
+    avgSolveTime: number[], totalTime: number) => {
     const player = loadPlayerData();
-    let game: GameModeProperties;
 
-    switch (gameType) {
-        case "Daily":
-            game = player.dailyGame;
-            break;
-        case "Practice":
-            game = player.practiceGame;
-            break;
-        default:
-            console.error("Invalid game type");
-            return;
-    }   
-    
-    if (outcome) {
-        game.wins += 1;
-        game.streak += 1;
-        game.maxStreak = Math.max(game.maxStreak, game.streak);
-        game.distribution[guesses - 1] += 1;
-    } else {
-        game.losses += 1;
-        game.streak = 0;
+    if (gameType === "Daily" || gameType === "Practice") {
+        let game = gameType === "Daily" ? player.dailyGame : player.practiceGame;
+        if (outcome) {
+            game.wins += 1;
+            game.streak += 1;
+            game.maxStreak = Math.max(game.maxStreak, game.streak);
+            game.distribution[guesses - 1] += 1;
+            game.averageSolveTime = [...game.averageSolveTime, ...avgSolveTime];
+            game.bestTime = Math.min(game.bestTime, totalTime);
+        } else {
+            game.losses += 1;
+            game.streak = 0;
+        }
+
+        localStorage.setItem("playerData", JSON.stringify(player));
+    } else if (gameType === "Timed") {
+        let timedGame = player.timedGame;
+        timedGame.gamesPlayed += 1;
+        timedGame.maxStreak = Math.max(timedGame.maxStreak, guesses);
+        timedGame.averageSolveTime = [...timedGame.averageSolveTime, ...avgSolveTime];
+        timedGame.timeSurvived = Math.max(timedGame.timeSurvived, totalTime);
+        localStorage.setItem("playerData", JSON.stringify(player));
     }
-
-    localStorage.setItem("playerData", JSON.stringify(player));
+    
 }

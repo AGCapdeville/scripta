@@ -15,27 +15,34 @@ import { Record } from './pages/Record';
 import { Settings } from './pages/Settings';
 import { HowToPlay } from './pages/HowToPlay';
 import { GameModes } from './pages/GameModes';
+import { TimedGame } from './pages/game-modes/TimedGame';
+
+import { TimerProvider } from './components/Timer';
+
 
 export default function App() {
   const location = useLocation();
 
   return (
     <div className="min-h-screen bg-fade-in text-white"> {/* 1) black baseline */}
-      <Navbar />
-      <AnimatePresence mode="wait" initial={false}> {/* ensures exit finishes before enter */}
-        <motion.div key={location.pathname}>
-          <Routes location={location} key={location.pathname}>
-            <Route path="/scripta/" element={<Page><HomePage /> </Page>} />
-            <Route path="/scripta/about"  element={<Page><About /> </Page>} />
-            <Route path="/scripta/settings" element={<Page><Settings /> </Page>} />
-            <Route path="/scripta/daily"  element={<Page><DailyGame /> </Page>} />
-            <Route path="/scripta/practice"   element={<Page><PracticeGame /> </Page>} />
-            <Route path="/scripta/statisics" element={<Page><Record /> </Page>} />
-            <Route path="/scripta/how-to-play" element={<Page><HowToPlay /></Page>} />
-            <Route path="/scripta/modes" element={<Page><GameModes /></Page>} />
-          </Routes>
-        </motion.div>
-      </AnimatePresence>
+      <TimerProvider>
+        <Navbar />
+        <AnimatePresence mode="wait" initial={false}> {/* ensures exit finishes before enter */}
+          <motion.div key={location.pathname}>
+            <Routes location={location} key={location.pathname}>
+              <Route path="/scripta/" element={<Page><HomePage /> </Page>} />
+              <Route path="/scripta/about"  element={<Page><About /> </Page>} />
+              <Route path="/scripta/settings" element={<Page><Settings /> </Page>} />
+              <Route path="/scripta/daily"  element={<Page><DailyGame /> </Page>} />
+              <Route path="/scripta/practice"   element={<Page><PracticeGame /> </Page>} />
+              <Route path="/scripta/statisics" element={<Page><Record /> </Page>} />
+              <Route path="/scripta/how-to-play" element={<Page><HowToPlay /></Page>} />
+              <Route path="/scripta/modes" element={<Page><GameModes /></Page>} />
+              <Route path="/scripta/time-attack" element={<Page><TimedGame /></Page>} />
+            </Routes>
+          </motion.div>
+        </AnimatePresence>
+      </TimerProvider>
 
       {/* 3) GLOBAL OVERLAY keyed by route */}
       <AnimatePresence initial={false}>

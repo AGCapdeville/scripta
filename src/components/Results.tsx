@@ -1,22 +1,30 @@
 // components/Results.tsx
 import { createPortal } from "react-dom";
 import { completeDaily, saveGameScore } from "../utility/UserData";
+import { convertTime } from "../utility/time";
 
 type ResultsProps = {
   game: string;
   outcome: boolean;
   guesses: number;
   secretWord: string;
+  averageTime: number[];
+  totalTime: number;
   onClose: () => void;
 };
 
-export const Results = ({ game, outcome, guesses, secretWord, onClose }: ResultsProps) => {
+export const Results = ({ game, outcome, guesses, secretWord, averageTime, totalTime, onClose }: ResultsProps) => {
+  
+  console.log("Avgs:");
+  console.log(averageTime);
+  console.log("total time:" + totalTime);
 
-  saveGameScore(game, outcome, guesses);
+  saveGameScore(game, outcome, guesses, averageTime, totalTime);
 
   if (game === "Daily") {
     completeDaily(outcome);
   }
+  
 
   const modalRoot = document.getElementById("modal-root")!;
   return createPortal(
@@ -59,8 +67,12 @@ export const Results = ({ game, outcome, guesses, secretWord, onClose }: Results
         <h2 className="mb-1 text-lg font-semibold text-white">
           {game} Results
         </h2>
+        <h4 className="mb-1 text-lg font-semibold text-white/70">
+          Time: {convertTime(totalTime)}
+        </h4>
         <p className="mb-4 text-sm text-[#b5bac1]">
-          {outcome ? "Nice! You won today’s game." : "Tough round — you’ll get it next time."}
+          {game === "Timed" ? `You completed ${guesses} words.` : 
+           outcome ? "Nice! You won today’s game." : "Tough round — you’ll get it next time."}
         </p>
 
         {/* Body */}
@@ -70,7 +82,8 @@ export const Results = ({ game, outcome, guesses, secretWord, onClose }: Results
           </div>
         ) : (
             <div className="mb-6 rounded-md bg-[#8a2f2f] px-4 py-3 text-sm">
-              The word was <span className="font-semibold">{secretWord}</span>.
+              {game === "Timed" ? "The last " : "The "}
+              word was "<span className="font-semibold">{secretWord}"</span>.
           </div>
         )}
 
