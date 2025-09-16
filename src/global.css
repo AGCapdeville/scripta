@@ -167,3 +167,16 @@ body {
   background-position: 0 0, calc(var(--scale-size) / 2) calc(var(--scale-size) / 2);
 }
 
+@layer utilities {
+  @keyframes pop {
+
+    0%,
+    100% {
+      transform: scale(1);
+    }
+
+    50% {
+      transform: scale(1.15);
+    }
+  }
+}

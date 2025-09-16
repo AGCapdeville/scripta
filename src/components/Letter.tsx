@@ -38,6 +38,7 @@ type FlipLetterProps = {
 export const FlipLetter = ({ letter, index, answer, placeholder, delayMs = 0 }: FlipLetterProps) => {
     const [flipped, setFlipped] = useState(false);
     const [pop, setPop] = useState(false);
+    const [borderDark, setBorderDark] = useState(false);
 
     // choose result color
     const isCorrect = answer[index] === letter;
@@ -56,37 +57,69 @@ export const FlipLetter = ({ letter, index, answer, placeholder, delayMs = 0 }: 
         return () => clearTimeout(t);
     }, [delayMs]);
 
-    // Pop logic when letter changes
     useEffect(() => {
+        if (isCorrect || isPresent || isAbsent) {
+            setBorderDark(false);
+            return;
+        };
+
         if (letter.trim() !== "") {
+            setBorderDark(true);
             setPop(true);
-            const timer = setTimeout(() => setPop(false), 500); // match animation length
-            return () => clearTimeout(timer);
+            const t = setTimeout(() => setPop(false), 350); // ~= animation length
+            return () => {
+                clearTimeout(t);
+            }
+        } else {
+            setBorderDark(false);
         }
     }, [letter]);
 
     return (
-        // <div className={`${pop ? `animate-pop` : ``}`}>
-            <div className={"w-[58px] h-[58px] [perspective:900px] font-black"} >
-                <div 
-                    className={`relative w-full h-full rounded-lg transition-transform duration-1000 ease-in-out [transform-style:preserve-3d] ${flipped ? `[transform:rotateX(180deg)]` : ``} `}
+        <div className={"w-[58px] h-[58px] [perspective:900px] font-black"} >
+            <div 
+                    // relative w-full h-full
+                className={`
+                    
+                    absolute inset-0 grid place-items-center
+
+                    transition-transform duration-1000 ease-in-out [transform-style:preserve-3d] 
+                    ${flipped ? `[transform:rotateX(180deg)]` : ``} 
+                    border-2 rounded-lg 
+                    ${pop ? "animate-[pop_0.3s_ease-in-out]" : ""}
+                    ${borderDark ? "border-black" : `border-${letterBorder}`}
+                `}
+            >
+                <div id="front-card"
+                    className={`
+                        absolute inset-0 grid place-items-center
+                        rounded-lg [backface-visibility:hidden] 
+                        bg-letter-bg-default border-letter-border text-letter-text
+                    `}
                 >
-                    <div id="front-card"
-                        className={`absolute inset-0 grid place-items-center rounded-lg border-2 [backface-visibility:hidden] bg-letter-bg-default border-letter-border text-letter-text`}
+                    {letter}
+                </div>
+                <div id="back-card"
+                    className={`
+                        absolute inset-0 grid place-items-center
+                        bg-${letterColor} text-${letterTextColor}
+                        [transform:rotateX(180deg)] [backface-visibility:hidden]
+                    `}
+                >
+                    <span 
+                        // className={`
+                        //     w-full h-full
+                        //     absolute inset-0 grid place-items-center rounded-lg border-2
+                        //     bg-${letterColor} border-${letterBorder} text-${letterTextColor}
+                        // `}
+                        // ${pop ? "animate-[pop_0.3s_ease-in-out]" : ""}
+                        // ${borderDark ? "border-opacity-100" : "border-opacity-50"}
+                        // onAnimationStart={() => setBorderDark(true)}
                     >
                         {letter}
-                    </div>
-                    <div id="back-card"
-                        className={`
-                            absolute inset-0 grid place-items-center rounded-lg border-2
-                            [transform:rotateX(180deg)] [backface-visibility:hidden] 
-                            bg-${letterColor} border-${letterBorder} text-${letterTextColor}`
-                        }
-                    >
-                        {letter}
-                    </div>
+                    </span>
                 </div>
             </div>
-        // </div>
+        </div>
     );
 }
