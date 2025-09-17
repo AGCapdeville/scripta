@@ -63,6 +63,9 @@ export const Keys = ({
       const tag = (target?.tagName || "").toLowerCase();
       if (tag === "input" || tag === "textarea" || target?.isContentEditable) return;
 
+      // Ignore held-down keys (prevents repeat spam)
+      if (e.repeat) return;
+
       // Normalize keys we care about
       const { key } = e;
 
