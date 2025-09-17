@@ -59,14 +59,9 @@ module.exports = {
                     "50%": { transform: "translateX(5px)" },
                     "75%": { transform: "translateX(-5px)" },
                 },
-                pop: {
-                    '0%, 100%': { transform: 'scale(1)' },
-                    '50%': { transform: 'scale(2)' },
-                },
             },
             animation: {
                 shake: "shake 0.5s ease-in-out",
-                pop: 'pop 0.3s ease-in-out',
             },
         },
     },

@@ -51,6 +51,7 @@ export const FlipLetter = ({ letter, index, answer, placeholder, delayMs = 0 }: 
 
     // Flip logic
     useEffect(() => {
+          if (!letter.trim()) return;        // don't flip on empty
         // start at 0deg, flip after delay -> triggers transition
         const startDelay = Math.max(16, delayMs); // ~1 frame minimum
         const t = setTimeout(() => setFlipped(true), startDelay);
@@ -79,47 +80,93 @@ export const FlipLetter = ({ letter, index, answer, placeholder, delayMs = 0 }: 
         <div className={"w-[58px] h-[58px] [perspective:900px] font-black"} >
             <div 
                     // relative w-full h-full
-                className={`
-                    
-                    absolute inset-0 grid place-items-center
+                // transition-transform duration-1000 ease-in-out
 
+//                absolute w-full h-full
+
+                className={`
+                    w-full h-full border-2 rounded-lg
                     transition-transform duration-1000 ease-in-out [transform-style:preserve-3d] 
-                    ${flipped ? `[transform:rotateX(180deg)]` : ``} 
-                    border-2 rounded-lg 
-                    ${pop ? "animate-[pop_0.3s_ease-in-out]" : ""}
-                    ${borderDark ? "border-black" : `border-${letterBorder}`}
+                    ${flipped ? `[transform:rotateX(180deg)]` : ""} 
                 `}
             >
                 <div id="front-card"
+                    // border-2 rounded-lg 
                     className={`
+                        border-1 rounded-lg
                         absolute inset-0 grid place-items-center
-                        rounded-lg [backface-visibility:hidden] 
+                        [backface-visibility:hidden] 
                         bg-letter-bg-default border-letter-border text-letter-text
                     `}
                 >
                     {letter}
                 </div>
                 <div id="back-card"
+                    // border-2 rounded-lg 
                     className={`
+                        border-1 rounded-lg
                         absolute inset-0 grid place-items-center
-                        bg-${letterColor} text-${letterTextColor}
-                        [transform:rotateX(180deg)] [backface-visibility:hidden]
+                        bg-${letterColor} text-${letterTextColor} border-[${letterColor}]
+                        ${pop ? "animate-[pop_0.25s_ease-out]" : ""}  // <-- move animation here
+                        [transform:rotateX(180deg)] 
+                        [backface-visibility:hidden]
                     `}
                 >
-                    <span 
-                        // className={`
-                        //     w-full h-full
-                        //     absolute inset-0 grid place-items-center rounded-lg border-2
-                        //     bg-${letterColor} border-${letterBorder} text-${letterTextColor}
-                        // `}
-                        // ${pop ? "animate-[pop_0.3s_ease-in-out]" : ""}
-                        // ${borderDark ? "border-opacity-100" : "border-opacity-50"}
-                        // onAnimationStart={() => setBorderDark(true)}
-                    >
-                        {letter}
-                    </span>
+                    {letter}
                 </div>
             </div>
         </div>
     );
 }
+
+    // Attempt:
+    // return (
+    //     <div className={"w-[58px] h-[58px] [perspective:900px] font-black"} >
+    //         <div
+    //             // relative w-full h-full
+    //             className={`
+    //                 absolute w-full h-full inset-0 grid place-items-center
+    //                 transition-transform duration-1000 ease-in-out [transform-style:preserve-3d] 
+    //                 ${flipped ? `[transform:rotateX(180deg)]` : ``} 
+    //                 border-2 rounded-lg 
+    //                 ${pop ? "animate-[pop_0.3s_ease-in-out]" : ""}
+    //                 ${borderDark ? "border-black" : `border-${letterBorder}`}
+    //             `}
+    //         >
+    //             <div id="front-card"
+    //                 // absolute inset-0 grid place-items-center
+    //                 className={`
+    //                     absolute inset-1 grid place-items-center
+    //                     rounded-lg [backface-visibility:hidden] 
+    //                     bg-letter-bg-default border-letter-border text-letter-text
+    //                 `}
+    //             >
+    //                 {letter}
+    //             </div>
+    //             <div id="back-card"
+    //                 className={`
+    //                     absolute inset-0 grid place-items-center
+    //                     bg-${letterColor} text-${letterTextColor}
+    //                     [backface-visibility:hidden]
+    //                     [transform:rotateX(180deg)]
+    //                 `}
+    //             // bg-${letterColor} text-${letterTextColor}
+    //             // absolute inset-0 grid place-items-center
+
+    //             >
+    //                 <span
+    //                 // className={`
+    //                 //     w-full h-full
+    //                 //     absolute inset-0 grid place-items-center rounded-lg border-2
+    //                 //     bg-${letterColor} border-${letterBorder} text-${letterTextColor}
+    //                 // `}
+    //                 // ${pop ? "animate-[pop_0.3s_ease-in-out]" : ""}
+    //                 // ${borderDark ? "border-opacity-100" : "border-opacity-50"}
+    //                 // onAnimationStart={() => setBorderDark(true)}
+    //                 >
+    //                     {letter}
+    //                 </span>
+    //             </div>
+    //         </div>
+    //     </div>
+    // );

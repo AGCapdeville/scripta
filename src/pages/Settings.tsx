@@ -101,7 +101,16 @@ export const Settings = () => {
         >
           Correct letter
         </div>
-
+      <button className={` 
+        w-[200px] h-fit
+        mt-10
+        px-4 py-2 rounded-lg
+      bg-blue-600 text-white font-medium 
+       hover:bg-blue-700 active:scale-95 transition`}
+        onClick={() => { localStorage.clear(); alert("Memory has been cleared!");}
+      }>
+        Clear Porgress
+      </button>
       </div>
     </div>
   );

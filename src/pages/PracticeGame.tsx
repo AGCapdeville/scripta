@@ -139,6 +139,8 @@ export const PracticeGame = () => {
           guesses={attempts}
           secretWord={secretWord}
           onClose={closeHandler}
+          averageTime={[]}
+          totalTime={0}
         />
       )}
 
