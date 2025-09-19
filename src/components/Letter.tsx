@@ -13,16 +13,26 @@ type FlipLetterProps = {
 
 export const FlipLetter = ({ letter, index, answer, placeholder, delayMs = 0 }: FlipLetterProps) => {
     const [flipped, setFlipped] = useState(false);
-    const [pop, setPop] = useState(false);
-    const [borderDark, setBorderDark] = useState(false);
+    // const [pop, setPop] = useState(false);
+    // const [borderDark, setBorderDark] = useState(false);
 
     // choose result color
     const isCorrect = answer[index] === letter;
     const isPresent = !isCorrect && answer.includes(letter);
     const isAbsent = !isCorrect && !isPresent && !placeholder;
 
-    const letterColor = isCorrect ? 'letter-bg-correct' : isPresent ? 'letter-bg-present' : isAbsent ? 'letter-bg-absent' : 'letter-bg-default';
-    const letterBorder = isCorrect ? 'letter-bg-correct' : isPresent ? 'letter-bg-present' : isAbsent ? 'letter-bg-absent' : 'letter-border';
+    const letterColor = 
+        isCorrect ? 'letter-bg-correct' :
+        isPresent ? 'letter-bg-present' : 
+        isAbsent ? 'letter-bg-absent' : 
+        'letter-bg-default';
+
+    const letterBorder = 
+        isCorrect ? 'letter-bg-correct' :
+        isPresent ? 'letter-bg-present' :
+        isAbsent ? 'letter-bg-absent' :
+        'letter-border';
+
     const letterTextColor = isCorrect || isPresent || isAbsent ? 'letter-text-invert' : 'letter-text';
 
     // Flip logic
@@ -34,29 +44,11 @@ export const FlipLetter = ({ letter, index, answer, placeholder, delayMs = 0 }: 
         return () => clearTimeout(t);
     }, [delayMs]);
 
-    useEffect(() => {
-        if (isCorrect || isPresent || isAbsent) {
-            setBorderDark(false);
-            return;
-        };
-
-        if (letter.trim() !== "") {
-            setBorderDark(true);
-            setPop(true);
-            const t = setTimeout(() => setPop(false), 350); // ~= animation length
-            return () => {
-                clearTimeout(t);
-            }
-        } else {
-            setBorderDark(false);
-        }
-    }, [letter]);
-
     return (
         <div className={"w-[58px] h-[58px] [perspective:900px] font-black"} >
             <div 
                 className={`
-                    w-full h-full relative border-2 rounded-lg
+                    w-full h-full relative
                     transition-transform duration-1000 ease-in-out [transform-style:preserve-3d] 
                     ${flipped ? `[transform:rotateX(180deg)]` : ""} 
                 `}
@@ -76,7 +68,7 @@ export const FlipLetter = ({ letter, index, answer, placeholder, delayMs = 0 }: 
                     className={`
                         border-1 rounded-lg
                         absolute inset-0 grid place-items-center
-                        bg-${letterColor} text-${letterTextColor} border-[${letterColor}]
+                        bg-${letterColor} text-${letterTextColor} border-${letterBorder}
                         [transform:rotateX(180deg)] 
                         [backface-visibility:hidden]
                     `}
