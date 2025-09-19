@@ -1,29 +1,5 @@
 import { useEffect, useState } from "react";
 
-const TileParent = `
-    relative w-full h-full rounded-lg
-    transition-transform duration-1000 ease-in-out 
-    [transform-style:preserve-3d]
-`;
-const TileFront = `
-    absolute inset-0 grid place-items-center rounded-lg
-    bg-letter-default
-    border-2 border-letter-border
-    [backface-visibility:hidden]
-`;
-
-const TileBack = `
-    absolute inset-0 grid place-items-center rounded-lg
-    border-2
-    [transform:rotateX(180deg)] 
-    [backface-visibility:hidden]
-`;
-
-const LetterContainer = `
-    w-[64px] h-[64px] 
-    [perspective:900px] 
-    font-black
-`;
 
 
 type FlipLetterProps = {
