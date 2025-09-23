@@ -36,8 +36,9 @@ export const TimedGame = () => {
   const [times, setTimes] = useState<number[]>([]);
   const { start, reset, remaining, pause } = useTimer();
 
+  const [prevTime, setPrevTime] = useState(60);
+
   let timeStart = 60;
-  let prevTime = 60;
   
   useEffect(() => {
     start(timeStart);            // e.g., 60-second round
@@ -78,7 +79,7 @@ export const TimedGame = () => {
     if (word === secretWord) {
       let avg = prevTime - remaining;
       setTimes([...times, avg]) // how long it took to complete word
-      prevTime = remaining;
+      setPrevTime(remaining + 60);
 
       setLoading(true);
       start(remaining + 60);
@@ -91,20 +92,17 @@ export const TimedGame = () => {
       setPresentLetters([]);
       setCorrectLetters([]);
       fetchSecretWord();
-    }
-
-    const ended = attempts >= 5;
-
-    if (ended) {
-      pause();
-      setShowResults(true)
-      setTimeout(() => setRevealModal(true), 1500);
+    } else {
+      if (attempts >= 5) {
+        pause();
+        setShowResults(true)
+        setTimeout(() => setRevealModal(true), 1500);
+      }
     }
   }, [save])
 
   useEffect(() => {
     if (showResults) return;
-
 
     setTotalTime(totalTime + 1);
 
@@ -135,6 +133,7 @@ export const TimedGame = () => {
   const submitGuess = useCallback(async () => {
     if (word.length !== WORD_LENGTH) return;
     if (!isValidWord(word, WORD_LENGTH)) return;
+    if (remaining === 0 && startedGame) return;
 
     saveWord(true);
   }, [word, saveWord]);
