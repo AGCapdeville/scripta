@@ -89,7 +89,7 @@ export const Keys = ({
         // "w-full rounded-md px-2 sm:px-3 md:px-4 " +        // horizontal padding scales
         "rounded-md " +        // horizontal padding scales
         // "h-10 sm:h-12 md:h-14 " +                    // key height scales
-        "h-14 sm:h-16 " +                    // key height scales
+        "h-14 " +                    // key height scales
         "transition-colors duration-150 active:scale-90 disabled:opacity-50 disabled:pointer-events-none " +
         "font-black uppercase " +
         (label === "ENTER" ?
@@ -134,7 +134,7 @@ export const Keys = ({
             const isAction = label === "ENTER" || label === "DEL";
             const span = isAction && rIdx === 2 ? "col-span-2" : "col-span-1";    
             const deleteStyle = (label === "DEL" ? "scale-125 scale-y-120 font-semibold" : "");
-            const enterStyle = (label === "ENTER" ? "scale-110 scale-y-125 min-[400px]:scale-120" : "") // TODO: Q: Alberto 400px -> xs
+            const enterStyle = (label === "ENTER" ? "scale-100 scale-y-110 min-[400px]:scale-110" : "") // TODO: Q: Alberto 400px -> xs
 
             return (  
               <button
