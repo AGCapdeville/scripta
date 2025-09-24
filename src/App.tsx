@@ -8,8 +8,8 @@ import { Page } from './components/Framer';
 
 // Pages
 import { Home, HomePage} from './pages/Home';
-import { DailyGame } from './pages/DailyGame';
-import { PracticeGame } from './pages/PracticeGame';
+import { DailyGame } from './pages/game-modes/DailyGame';
+import { PracticeGame } from './pages/game-modes/PracticeGame';
 import { About } from './pages/About';
 import { Record } from './pages/Record';
 import { Settings } from './pages/Settings';
