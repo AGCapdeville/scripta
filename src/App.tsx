@@ -16,6 +16,7 @@ import { Settings } from './pages/Settings';
 import { HowToPlay } from './pages/HowToPlay';
 import { GameModes } from './pages/GameModes';
 import { TimedGame } from './pages/game-modes/TimedGame';
+import { Portal } from './pages/Portal';
 
 import { TimerProvider } from './components/Timer';
 
@@ -30,7 +31,8 @@ export default function App() {
         <AnimatePresence mode="wait" initial={false}> {/* ensures exit finishes before enter */}
           <motion.div key={location.pathname}>
             <Routes location={location} key={location.pathname}>
-              <Route path="/scripta/" element={<Page><HomePage /> </Page>} />
+              <Route path="/*" element={<Page><HomePage /> </Page>} />
+              <Route path="/scripta" element={<Page><HomePage /> </Page>} />
               <Route path="/scripta/about"  element={<Page><About /> </Page>} />
               <Route path="/scripta/settings" element={<Page><Settings /> </Page>} />
               <Route path="/scripta/daily"  element={<Page><DailyGame /> </Page>} />
@@ -39,6 +41,7 @@ export default function App() {
               <Route path="/scripta/how-to-play" element={<Page><HowToPlay /></Page>} />
               <Route path="/scripta/modes" element={<Page><GameModes /></Page>} />
               <Route path="/scripta/time-attack" element={<Page><TimedGame /></Page>} />
+              <Route path="/scripta/portal" element={<Page><Portal /></Page>}></Route>
             </Routes>
           </motion.div>
         </AnimatePresence>
