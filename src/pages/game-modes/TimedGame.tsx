@@ -9,7 +9,6 @@ import { isValidWord } from '../../utility/words';
 import { getFiveLetterWord } from '../../utility/fiveLetterWord';
 
 import { useTimer } from "../../components/Timer";
-import { time } from 'framer-motion';
 
 const WORD_LENGTH = 5;
 
@@ -42,7 +41,6 @@ export const TimedGame = () => {
   
   useEffect(() => {
     start(timeStart);            // e.g., 60-second round
-    setTotalTime(timeStart);
     setStartedGame(true);
     return () => reset(); // cleanup on unmount
   }, [start, reset]);
@@ -76,13 +74,13 @@ export const TimedGame = () => {
   useEffect(() => {
     if (!save || showResults) return;
 
-    if (word === secretWord) {
+    if (word === secretWord && remaining > 0) {
       let avg = prevTime - remaining;
       setTimes([...times, avg]) // how long it took to complete word
-      setPrevTime(remaining + 60);
+      setPrevTime(remaining + 30);
 
       setLoading(true);
-      start(remaining + 60);
+      start(remaining + 30);
       setCompletedWords(completedWords + 1);
 
       // Reset
@@ -103,12 +101,14 @@ export const TimedGame = () => {
 
   useEffect(() => {
     if (showResults) return;
+    console.log(showResults);
+    console.log(totalTime);
 
     setTotalTime(totalTime + 1);
 
     if (remaining === 0 && startedGame) {
       setShowResults(true);
-      setTimeout(() => setRevealModal(true), 500);
+      setTimeout(() => setRevealModal(true), 100);
     }
   }, [remaining])
 
@@ -190,7 +190,7 @@ export const TimedGame = () => {
           guesses={completedWords}
           secretWord={secretWord}
           averageTime={times}
-          totalTime={totalTime}
+          totalTime={totalTime - 2} // not sure why time here is + 2
           onClose={closeHandler}
         />
       )}
