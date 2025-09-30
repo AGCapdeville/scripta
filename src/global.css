@@ -105,7 +105,7 @@
   --scale-size: 2.5rem;
   --scale-color: hsla(0, 0%, 10%, 0.06);
 
-  --disabled-bg: hsla(0, 0%, 24%); /* dark neutral */
+  --disabled-bg: hsla(0, 0%, 4%); /* dark neutral */
   --disabled-fg: hsla(0, 0%, 70%); /* readable muted text */
   --disabled-border: hsla(0, 0%, 44%); /* mid border */
 }

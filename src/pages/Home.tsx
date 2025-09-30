@@ -5,7 +5,8 @@ import { useEffect } from 'react';
 import { motion } from "framer-motion";
 import { Play, HelpCircle, BarChart3, Settings, Sparkles } from "lucide-react";
 import { Footer } from "../components/Footer";
-import { checkDailyStreak, loadPlayerData } from "../utility/UserData";
+import { checkDailyStreak, loadPlayerData } from "../utility/userData";
+import { useAuth } from "../context/AuthContext";
 
 export const Home = () => {
 
@@ -92,13 +93,13 @@ const Title = ({ text }: { text: string }) => {
 };
 
 const Pill = ({ children }: { children: React.ReactNode }) => (
-  <div className="inline-flex items-center gap-2 rounded-full border border-border/60 bg-background/60 backdrop-blur px-4 py-1.5 text-sm text-foreground/70 shadow-sm">
+  <div className="inline-flex items-center gap-2 rounded-full border border-border/60 bg-background/60 backdrop-blur px-4 py-1.5 text-sm text-foreground/70 shadow-sm w-fit">
     {children}
   </div>
 );
 
 const CTAButton = ({ href, icon: Icon, children, variant = "primary" }: { href: string, icon: any, children: React.ReactNode, variant?: "primary" | "outline" | "ghost" }) => {
-  const base = "inline-flex items-center gap-2 px-6 py-3 rounded-xl font-medium transition";
+  const base = "w-[90vw] sm:w-[45vw] md:w-[200px] inline-flex items-center gap-2 px-6 py-3 rounded-xl font-medium transition";
   const styles =
     variant === "primary"
       ? "bg-primary text-primary-foreground hover:brightness-105"
@@ -123,6 +124,12 @@ export const HomePage = () => {
 
   const streak = checkDailyStreak();
 
+  const { session } = useAuth();
+  
+  const displayName =
+      session?.user?.user_metadata?.display_name ??
+      session?.user?.email; // fallback
+
   useEffect(() => {
     LoadTheme();
   }, []);
@@ -140,25 +147,47 @@ export const HomePage = () => {
             <Title text="Scripta" />
           </div>
           
-          <p className="mt-4 max-w-xl text-balance text-base md:text-lg text-foreground/70">
-            A minimalist word puzzle — clean, calm, and just challenging enough.
+          <p className="flex flex-col mt-4 max-w-xl text-balance text-base md:text-lg text-foreground/70">
+            <span>A minimalist word puzzle — clean, calm, and just challenging enough.</span>
+            
+            {session && displayName && (
+              <div className="flex justify-center pt-5 font-bold">
+                <Pill>
+                    Welcome back,
+                    <span className="text-primary"> {displayName.split(" ")[0]} </span>
+                    !
+                </Pill>
+              </div>
+            )}
+
           </p>
 
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+          <div className="mt-8 grid gap-3 sm:flex sm:flex-wrap sm:justify-center">
+            <div className={`grid gap-3 ${session ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4' : 'grid-cols-1 md:grid-cols-3'} sm:gap-4`}>
             <CTAButton href="/scripta/modes" icon={Play}>Play</CTAButton>
+            {!session && (
+              <CTAButton href="/scripta/portal" icon={Sparkles} variant="outline">Sign Up</CTAButton>
+            )}
             <CTAButton href="/scripta/how-to-play" icon={HelpCircle} variant="outline">How to Play</CTAButton>
-            <CTAButton href="/scripta/statisics" icon={BarChart3} variant="ghost">Statistics</CTAButton>
-            <CTAButton href="/scripta/settings" icon={Settings} variant="ghost">Settings</CTAButton>
-          </div>
+            {session && (
+              <CTAButton href="/scripta/statisics" icon={BarChart3} variant="ghost">Statistics</CTAButton>
+            )}
+            {session && (
+              <CTAButton href="/scripta/settings" icon={Settings} variant="ghost">Settings</CTAButton>
+            )}
 
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
-            {streak ? 
-              <Pill>🔥 <span className="font-medium">{parseInt(streak, 10)}‑day streak</span></Pill> 
-              : 
-              <Pill>🔥 <span className="font-medium">0‑day streak</span></Pill>
-            }
-            <Pill>⭐ <span className="font-medium">Win rate {winRate}%</span></Pill>
+            </div>
           </div>
+          {session && (
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
+              {streak ? 
+                <Pill>🔥 <span className="font-medium">{parseInt(streak, 10)}‑day streak</span></Pill> 
+                : 
+                <Pill>🔥 <span className="font-medium">0‑day streak</span></Pill>
+              }
+              <Pill>⭐ <span className="font-medium">Win rate {winRate}%</span></Pill>
+            </div>
+          )}
         </div>
 
 

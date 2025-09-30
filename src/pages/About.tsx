@@ -1,10 +1,27 @@
 import { Footer } from "../components/Footer";
 import { PageTitle } from "../components/PageComponents";
-import { Atom, Wind, Zap, Code } from "lucide-react";
+import { Atom, Wind, Zap, Code, Shell, DatabaseZap } from "lucide-react";
 
-const TechBadge = ({ icon: Icon, label }: { icon: any; label: string }) => (
+type IconTint =
+  | "sky-400"
+  | "cyan-300"
+  | "violet-400"
+  | "blue-400"
+  | "emerald-400"
+  | "orange-400";
+
+const ICON_TONE: Record<IconTint, string> = {
+  "sky-400": "text-sky-400",
+  "cyan-300": "text-cyan-300",
+  "violet-400": "text-violet-400",
+  "blue-400": "text-blue-400",
+  "emerald-400": "text-emerald-400",
+  "orange-400": "text-orange-400",
+};
+
+const TechBadge = ({ icon: Icon, iconColor, label }: { icon: any; iconColor: IconTint; label: string }) => (
   <span className="inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-background/70 px-2.5 py-1 text-xs text-foreground/80">
-    <Icon className="h-3.5 w-3.5" aria-hidden="true" />
+    <Icon className={`h-5 w-5 ${ICON_TONE[iconColor]}`} aria-hidden="true" />
     <span>{label}</span>
   </span>
 );
@@ -30,10 +47,12 @@ export const About = () => {
           </p>
 
           <div className="mt-4 flex flex-wrap gap-2">
-            <TechBadge icon={Atom} label="React" />
-            <TechBadge icon={Wind} label="Tailwind" />
-            <TechBadge icon={Zap} label="Vite" />
-            <TechBadge icon={Code} label="TypeScript" />
+            <TechBadge icon={Atom} iconColor="sky-400" label="React" />
+            <TechBadge icon={Wind} iconColor="cyan-300" label="Tailwind" />
+            <TechBadge icon={Zap} iconColor="violet-400" label="Vite" />
+            <TechBadge icon={Code} iconColor="blue-400" label="TypeScript" />
+            <TechBadge icon={DatabaseZap} iconColor="emerald-400" label="Supabase" />
+            <TechBadge icon={Shell} iconColor="orange-400" label="Lucide" />
           </div>
 
           <p className="mt-2 text-sm text-foreground/60">

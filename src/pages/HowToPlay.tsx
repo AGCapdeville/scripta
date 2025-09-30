@@ -52,8 +52,6 @@ const Tile = ({
 export const HowToPlay = () => {
   return (
     <div className="h-screen min-h-dvh w-full flex flex-col overflow-y-auto items-center">
-    {/* <div className="h-screen w-full overflow-y-auto flex flex-col items-center bg-background"> */}
-      {/* scrollable content here */}
       <PageTitle title="How to Play" />
 
       <div className="flex flex-col w-full max-w-6xl mt-6 rounded-2xl border border-border/60 bg-background/60 backdrop-blur p-6 text-left">

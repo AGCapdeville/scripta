@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, LinkProps } from 'react-router-dom';
+import { supabase } from "../lib/supabaseClient";
+import { useAuth } from "../context/AuthContext";
 
 export const ThreeLineMenu = () => {
     const [open, setOpen] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
     const btnRef = useRef<HTMLButtonElement>(null);
-
 
     return (
         <div className="relative inline-block text-left">
@@ -115,6 +116,22 @@ export const LinkButton = ({ to, children, className, clickFunction}: LinkButton
 
 export const HamburgerMenu = () => {
     const [open, setOpen] = useState(false);
+    const { session } = useAuth();
+
+    const handleSignOut = async () => {
+        try {
+            await supabase.auth.signOut();
+            setOpen(false);
+        } catch (error) {
+            console.error("Failed to sign out", error);
+        }
+    };
+
+    const displayName =
+        session?.user?.user_metadata?.display_name ??
+        session?.user?.email; // fallback
+
+    const signedIn = session?.user?.user_metadata?.display_name ? true : false;
 
     return (
         <div className="relative">
@@ -160,13 +177,28 @@ export const HamburgerMenu = () => {
                         ✕
                     </button>
                 </div>
+                
 
                 {/* Menu Content */}
                 <nav className="w-full flex flex-col text-foreground/70 hover:text-foreground transition gap-4 ">
+                    {session && (
+                        <div className="mx-3 rounded-xl border border-border/50 bg-background/60 px-4 py-3 text-xs text-foreground/70 shadow-sm relative">
+                            <div className="text-[0.65rem] uppercase tracking-[0.12em] text-foreground/50">Signed in</div>
+                            <div className="mt-1 truncate text-sm font-medium text-foreground">{displayName}</div>
+                            <div className="absolute top-7 right-3">
+                                <LinkButton
+                                    to="/scripta/"
+                                    children="Sign Out"
+                                    className="pl-4 px-3 text-sm text-rose-200 transition hover:bg-black hover:text-rose-300"
+                                    clickFunction={handleSignOut}
+                                />
+                            </div>
+                        </div>
+                    )}
                     <LinkButton 
                         to="/scripta/"
                         // className="px-3 py-2 hover:text-violet-400 hover:bg-black"
-                        className="pl-4 px-3 py-2 text-sm text-foreground/70 hover:text-foreground hover:bg-black text-foreground transition"
+                        className="pl-4 px-3 py-1 text-sm text-foreground/70 hover:text-foreground hover:bg-black text-foreground transition"
                         clickFunction={() => setOpen(false)}
                     >
                         Home
@@ -174,59 +206,52 @@ export const HamburgerMenu = () => {
                     <LinkButton
                         to="/scripta/modes"
                         children="Game Modes"
-                        className="pl-4 px-3 py-2 text-sm text-foreground/70 hover:text-foreground hover:bg-black text-foreground transition"
+                        className="pl-4 px-3 py-1 text-sm text-foreground/70 hover:text-foreground hover:bg-black text-foreground transition"
                         clickFunction={() => setOpen(false)}
                     />
                     <LinkButton
                         to="/scripta/how-to-play"
                         children="How to Play"
-                        className="pl-4 px-3 py-2 text-sm text-foreground/70 hover:text-foreground hover:bg-black text-foreground transition"
+                        className="pl-4 px-3 py-1 text-sm text-foreground/70 hover:text-foreground hover:bg-black text-foreground transition"
                         clickFunction={() => setOpen(false)}
                     />
-                    <LinkButton
-                        to="/scripta/statisics"
-                        children="Statistics"
-                        className="pl-4 px-3 py-2 text-sm text-foreground/70 hover:text-foreground hover:bg-black text-foreground transition"
-                        clickFunction={() => setOpen(false)}
-                    />
+                    {signedIn && (
+                        <LinkButton
+                            to="/scripta/statisics"
+                            children="Statistics"
+                            className="pl-4 px-3 py-1 text-sm text-foreground/70 hover:text-foreground hover:bg-black text-foreground transition"
+                            clickFunction={() => setOpen(false)}
+                        />
+                    )}
                     <LinkButton
                         to="/scripta/settings"
                         children="Settings"
-                        className="pl-4 px-3 py-2 text-sm text-foreground/70 hover:text-foreground hover:bg-black text-foreground transition"
+                        className="pl-4 px-3 py-1 text-sm text-foreground/70 hover:text-foreground hover:bg-black text-foreground transition"
                         clickFunction={() => setOpen(false)}
                     />
                     <LinkButton
                         to="/scripta/about"
                         children="About"
-                        className="pl-4 px-3 py-2 text-sm text-foreground/70 hover:text-foreground hover:bg-black text-foreground transition"
+                        className="pl-4 px-3 py-1 text-sm text-foreground/70 hover:text-foreground hover:bg-black text-foreground transition"
                         clickFunction={() => setOpen(false)}
                     />
 
-                    {/* <Link to="scripta/modes"
-                        className="px-3 py-2 text-sm "
-                    >
-                        Game Modes
-                    </Link>
-                    <Link to="scripta/how-to-play"
-                        className="px-3 py-2 text-sm "
-                    >
-                        How to Play
-                    </Link>
-                    <Link to="scripta/statisics"
-                        className="px-3 py-2 text-sm "
-                    >
-                        Statistics
-                    </Link>
-                    <Link to="scripta/settings"
-                        className="px-3 py-2 text-sm "
-                    >
-                        Settings
-                    </Link>
-                    <Link to="scripta/about"
-                        className="px-3 py-2 text-sm "
-                    >
-                        About
-                    </Link> */}
+                    {!signedIn && (
+                        <div>
+                            <LinkButton
+                                to={{ pathname: "/scripta/portal", search: "?mode=signin" }}
+                                children="Sign In"
+                                className="pl-4 px-3 text-sm text-primary hover:text-foreground hover:bg-black text-foreground transition"
+                                clickFunction={() => setOpen(false)}
+                            /> /
+                            <LinkButton
+                                to={{ pathname: "/scripta/portal", search: "?mode=signup" }}
+                                children="Sign Up"
+                                className="pl-4 px-3 text-sm text-primary hover:text-foreground hover:bg-black text-foreground transition"
+                                clickFunction={() => setOpen(false)}
+                            />
+                        </div>
+                    )}
 
                 </nav>
             </div>

@@ -19,7 +19,6 @@ export const Settings = () => {
     rounded m-3
     ${selected ? "ring-3 ring-key-bg-present ring-offset-2 ring-offset-background" : "ring-1 ring-foreground/50 text-foreground/50"}
   `
-    
   return (
 
     <div className= "flex flex-col min-h-screen w-full mx-auto max-w-6xl bg-background text-foreground">
@@ -106,7 +105,7 @@ export const Settings = () => {
         mt-10
         px-4 py-2 rounded-lg
       bg-blue-600 text-white font-medium 
-       hover:bg-blue-700 active:scale-95 transition`}
+      hover:bg-blue-700 active:scale-95 transition`}
         onClick={() => { localStorage.clear(); alert("Memory has been cleared!");}
       }>
         Clear Porgress

@@ -4,7 +4,8 @@ import { BrowserRouter } from 'react-router-dom';
 import './Global.css'
 import App from './App'
 
-import { loadPlayerData } from './utility/UserData';
+import { loadPlayerData } from './utility/userData';
+import { AuthProvider } from './context/AuthContext';
 
 let root = document.getElementById('root');
 
@@ -13,8 +14,10 @@ loadPlayerData();
 if (root)
   createRoot(root).render(
     <BrowserRouter>
-      {/* <StrictMode> */}
-      <App />
-      {/* </StrictMode> */}
+      <AuthProvider>
+        {/* <StrictMode> */}
+        <App />
+        {/* </StrictMode> */}
+      </AuthProvider>
     </BrowserRouter>
   )
