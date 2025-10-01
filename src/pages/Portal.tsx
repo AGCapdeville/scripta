@@ -1,6 +1,6 @@
 import { FormEvent, useEffect, useState } from "react";
 import { Footer } from "../components/Footer";
-import { LogIn, UserPlus } from "lucide-react";
+import { LogIn, UserPlus, BarChart3, Trophy, ShieldCheck } from "lucide-react";
 
 import { supabase } from "../lib/supabaseClient";
 import { useAuth } from "../context/AuthContext";
@@ -60,6 +60,7 @@ export const Portal = () => {
     }, [mode]);
 
     const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+        console.log("Handling submit");
         event.preventDefault();
 
         const trimmedEmail = email.trim();
@@ -81,6 +82,7 @@ export const Portal = () => {
                     { email: trimmedEmail, password: trimmedPassword }
                 );
                 if (error) throw error;
+                setFeedback({ kind: "success", message: "You are now signed in." });
             } else {
                 const { data, error } = await supabase.auth.signUp({ 
                     email: trimmedEmail, 
@@ -110,7 +112,7 @@ export const Portal = () => {
 
                 setFeedback(
                     data.session ? 
-                    { 
+                    {
                         kind: "success", 
                         message: "Account created. You're signed in." 
                     } : { 
@@ -131,83 +133,103 @@ export const Portal = () => {
     const displayName =
         session?.user?.user_metadata?.display_name ??
         session?.user?.email; // fallback
+
     return (
-        <div className="min-h-screen w-full bg-background text-foreground">
-            <div className="mx-auto flex min-h-screen w-full max-w-4xl flex-col gap-8 px-4 py-10">
-                <div className="w-full rounded-3xl border border-border/50 bg-background/70 backdrop-blur-sm p-8 text-left">
-                    <header className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-                        <hgroup>
-                            <h2 className="text-xl font-semibold text-foreground flex items-center gap-2"><ActiveIcon className="h-5 w-5" />{title}</h2>
-                            <p className="mt-1 text-sm text-foreground/70">{description}</p>
-                        </hgroup>
-                        {session && (
-                            <div className="rounded-xl border border-border/60 bg-background/50 px-3 py-2 text-xs text-foreground/80">Signed in as <span className="font-medium">{displayName}</span></div>
-                        )}
-                    </header>
+        <div className="flex flex-col min-h-screen w-full bg-background text-foreground items-center">
+            <div className="flex w-full max-w-6xl flex-1 flex-col px-4 py-8 h-[100vh] overflow-auto">
+                <div className="flex w-full flex-col gap-6 lg:flex-row">
+                    <div className="w-full rounded-3xl border border-border/50 bg-background/70 backdrop-blur-sm p-8 text-left">
+                        <header className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                            <hgroup>
+                                <h2 className="text-xl font-semibold text-foreground flex items-center gap-2"><ActiveIcon className="h-5 w-5" />{title}</h2>
+                                <p className="mt-1 text-sm text-foreground/70">{description}</p>
+                            </hgroup>
+                            {session && (
+                                <div className="rounded-xl border border-border/60 bg-background/50 px-3 py-2 text-xs text-foreground/80">Signed in as <span className="font-medium">{displayName}</span></div>
+                            )}
+                        </header>
+                        
+                        <div className="mt-6 flex flex-row flex-wrap gap-2 rounded-2xl bg-background/60 p-1">
+                            {(Object.entries(AUTH) as [AuthMode, (typeof AUTH)[AuthMode]][]).map(([value, state]) => (
+                                <button
+                                    key={value}
+                                    type="button"
+                                    className={`flex-1 rounded-2xl px-4 py-2 text-sm font-medium transition ${mode === value ? "bg-primary text-background shadow-sm" : "text-foreground/70 hover:text-foreground"}`}
+                                    onClick={() => setMode(value)}
+                                    disabled={busy}
+                                >
+                                    {state.title}
+                                </button>
+                            ))}
+                        </div>
 
-                    <div className="mt-6 flex flex-row flex-wrap gap-2 rounded-2xl bg-background/60 p-1">
-                        {(Object.entries(AUTH) as [AuthMode, (typeof AUTH)[AuthMode]][]).map(([value, state]) => (
-                            <button
-                                key={value}
-                                type="button"
-                                className={`flex-1 rounded-2xl px-4 py-2 text-sm font-medium transition ${mode === value ? "bg-primary text-background shadow-sm" : "text-foreground/70 hover:text-foreground"}`}
-                                onClick={() => setMode(value)}
-                                disabled={busy}
-                            >
-                                {state.title}
-                            </button>
-                        ))}
-                    </div>
-
-                    {feedback && (
-                        <div
-                            className={`mt-6 rounded-xl border px-4 py-3 text-sm ${
-                                feedback.kind === "success"
-                                    ? "border-emerald-500/40 bg-emerald-500/10 text-foreground"
-                                    : feedback.kind === "error"
+                        {feedback && (
+                            <div
+                                className={`mt-6 rounded-xl border px-4 py-3 text-sm ${
+                                    feedback.kind === "success"
+                                        ? "border-emerald-500/40 bg-emerald-500/10 text-foreground"
+                                        : feedback.kind === "error"
                                         ? "border-rose-500/40 bg-rose-500/10 text-foreground"
                                         : "border-border/60 bg-background/60 text-foreground/80"
-                            }`}
-                        >
-                            {feedback.message}
-                        </div>
-                    )}
-
-                    <form className="mt-6 space-y-6" onSubmit={handleSubmit}>
-                        {mode === "signup" && (
-                            <div>
-                                <label className="block text-sm font-medium text-foreground/80" htmlFor="portal-username">
-                                    Username
-                                </label>
-                                <input id="portal-username" className={inputClass} placeholder="Skelator1990" value={username} name="username" autoComplete="username" onChange={(event) => setUsername(event.target.value)} disabled={disabled} />
+                                }`}
+                            >
+                                {feedback.message}
                             </div>
                         )}
 
-                        <div>
-                            <label className="block text-sm font-medium text-foreground/80" htmlFor="portal-email">
-                                Email
-                            </label>
-                            <input id="portal-email" className={inputClass} placeholder="you@example.com" value={email} onChange={(event) => setEmail(event.target.value)} autoComplete="email" inputMode="email" disabled={disabled} />
-                        </div>
+                        <form className="mt-6 space-y-6" onSubmit={handleSubmit}>
 
-                        <div>
-                            <label className="block text-sm font-medium text-foreground/80" htmlFor="portal-password">
-                                Password
-                            </label>
-                            <input id="portal-password" className={inputClass} placeholder="at least 6 characters" value={password} onChange={(event) => setPassword(event.target.value)} type="password" autoComplete={mode === "signup" ? "new-password" : "current-password"} disabled={disabled} />
-                        </div>
+                            {mode === "signup" && (
+                                <div>
+                                    <label className="block text-sm font-medium text-foreground/80" htmlFor="portal-username">
+                                        Username
+                                    </label>
+                                    <input id="portal-username" className={inputClass} placeholder="Skelator1990" value={username} name='username' autoComplete="username" onChange={(event) => setUsername(event.target.value)} disabled={disabled} />
+                                </div>
+                            )}
 
-                        {mode === "signup" && (
                             <div>
-                                <label className="block text-sm font-medium text-foreground/80" htmlFor="portal-confirmPassword">
-                                    Confirm Password
+                                <label className="block text-sm font-medium text-foreground/80" htmlFor="portal-email">
+                                    Email
                                 </label>
-                                <input id="portal-confirmPassword" className={inputClass} placeholder="confirm password" value={confirmPassword} onChange={(event) => setConfirmPassword(event.target.value)} type="password" autoComplete="new-password" disabled={disabled} />
+                                <input id="portal-email" className={inputClass} placeholder="you@example.com" value={email} onChange={(event) => setEmail(event.target.value)} autoComplete="email" inputMode="email" disabled={disabled} />
                             </div>
-                        )}
-                    </form>
+
+                            <div>
+                                <label className="block text-sm font-medium text-foreground/80" htmlFor="portal-password">
+                                    Password
+                                </label>
+                                <input id="portal-password" className={inputClass} placeholder="at least 6 characters" value={password} onChange={(event) => setPassword(event.target.value)} type="password" autoComplete={mode === "signup" ? "new-password" : "current-password"} disabled={disabled} />
+                            </div>
+
+                            {mode === "signup" && (
+                                <div>
+                                    <label className="block text-sm font-medium text-foreground/80" htmlFor="portal-confirmPassword">
+                                        Confirm Password
+                                    </label>
+                                    <input id="portal-confirmPassword" className={inputClass} placeholder="confirm password" value={confirmPassword} onChange={(event) => setConfirmPassword(event.target.value)} type="password" autoComplete="new-password" disabled={disabled} />
+                                </div>
+                            )}
+
+                            <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+                                <button 
+                                    type="submit" 
+                                    disabled={disabled || busy}
+                                    className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-background transition hover:bg-primary/90 disabled:cursor-not-allowed disabled:bg-primary/40"
+                                >   
+                                    {busy ? (
+                                        <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                                        </svg>
+                                    ) : null}   
+                                    {cta}
+                                </button>
+                                
+                            </div>
+                        </form>
+                    </div>
                 </div>
-
                 <div className="mt-auto w-full">
                     <Footer />
                 </div>
