@@ -166,7 +166,8 @@ export const HomePage = () => {
             <div className={`grid gap-3 ${session ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4' : 'grid-cols-1 md:grid-cols-3'} sm:gap-4`}>
             <CTAButton href="/scripta/modes" icon={Play}>Play</CTAButton>
             {!session && (
-              <CTAButton href="/scripta/portal" icon={Sparkles} variant="outline">Sign Up</CTAButton>
+                <CTAButton href={{ pathname: "/scripta/portal", search: "?mode=signup" }}
+                icon={Sparkles} variant="outline">Sign Up</CTAButton>
             )}
             <CTAButton href="/scripta/how-to-play" icon={HelpCircle} variant="outline">How to Play</CTAButton>
             {session && (
