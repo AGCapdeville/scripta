@@ -20,7 +20,7 @@ const ICON_TONE: Record<IconTint, string> = {
 };
 
 const TechBadge = ({ icon: Icon, iconColor, label }: { icon: any; iconColor: IconTint; label: string }) => (
-  <span className="inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-background/70 px-2.5 py-1 text-xs text-foreground/80">
+  <span className="inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-background/70 px-1 sm:px-2  py-1 text-xs text-foreground/80">
     <Icon className={`h-5 w-5 ${ICON_TONE[iconColor]}`} aria-hidden="true" />
     <span>{label}</span>
   </span>
@@ -29,9 +29,9 @@ const TechBadge = ({ icon: Icon, iconColor, label }: { icon: any; iconColor: Ico
 export const About = () => {
 
   return (
-    <div className="min-h-screen flex flex-col items-center bg-background">
-      <div className="w-full max-w-6xl mt-12 rounded-2xl border border-border/60 bg-background/60 backdrop-blur p-6 text-left">
-        <h2 className="text-lg font-semibold text-foreground">
+    <div className="h-[100vh] overflow-hidden overflow-y-auto flex flex-col items-center bg-background ml-[10px] mr-[10px]">
+      <div className="w-full max-w-6xl mt-6 rounded-2xl border border-border/60 bg-background/60 backdrop-blur p-6 text-left">
+        <h2 className="text-lg sm:text-[10px] font-semibold text-foreground">
           Why I Built Scripta
         </h2>
 
