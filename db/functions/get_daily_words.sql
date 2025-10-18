@@ -5,7 +5,7 @@ LANGUAGE sql
 STABLE
 AS $$
   SELECT id, word
-  FROM public.word
+  FROM public.words
   WHERE "length" = p_word_length
   ORDER BY md5(current_date::text || ':' || id::text);
 $$;

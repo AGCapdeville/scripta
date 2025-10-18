@@ -1,4 +1,4 @@
-CREATE OR REPLACE TABLE public.word (
+CREATE OR REPLACE TABLE public.words (
   id serial not null,
   word text not null,
   length integer null,

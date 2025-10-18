@@ -4,7 +4,7 @@ LANGUAGE sql
 STABLE
 AS $$
   SELECT w.id, w.word, w.length
-  FROM public.word AS w
+  FROM public.words AS w
   WHERE w.length = p_length
   ORDER BY w.id;
 $$;
